@@ -1,0 +1,76 @@
+.pieContacto {
+  background-color: $detalle6;
+  display: flex;
+  position: absolute;
+  width: calc(100% - 2rem);
+  margin-top: 75%;
+  a {
+    font-size: 0.8rem;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 500;
+    line-height: 30px;
+    text-decoration: unset;
+    color: white;
+    margin: auto;
+    text-transform: uppercase;
+
+    &:hover {
+      color: $detalle2;
+      opacity: 0.7;
+    }
+    i {
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      color: $fondo;
+    }
+  }
+}
+.row {
+  width: 100%;
+  --bs-gutter-x: 0rem;
+}
+h5 {
+  font-size: 1.2rem;
+  width: 100%;
+  color: $letra;
+  text-align: center;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+}
+
+.maxCar {
+  width: auto;
+}
+.slick-prev:before,
+.slick-next:before {
+  font-family: "slick";
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.75;
+  color: rgba(0, 0, 0,.3) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.pad {
+  padding-right: 1.2rem;
+  padding-left: 1.2rem;
+  border: none;
+  @include desktop{
+    padding-right: 2.9rem;
+    padding-left: 2.9rem;
+      
+  }
+  a {
+    text-decoration: none;
+  }
+  .card {
+    padding: 1rem;
+    border: none;
+  }
+}
+.pieFoto {
+  img {
+    width: 2rem;
+  }
+}

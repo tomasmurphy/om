@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+
+// variables 
+$fondo: white;
+$letra: black;
+$detalle: rgba(0,0,0, .8);
+$detalle8: rgba(0,0,0, 0.8);
+$detalle6: rgba(0,0,0, 0.6);
+$detalle4: rgba(0,0,0, 0.4);
+$detalle2: rgba(0,0,0, 0.2);
+$detalle2: rgba(0,0,0, 0);
+
+// mixin 
+@mixin desktop {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+@mixin mobile {
+  @media screen and (max-width: 767.9px) {
+    @content;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  color: $letra;
+  font-family: "Maven Pro";
+  letter-spacing: .5px;
+  }
+
+.negrita{
+  font-weight: bold;
+}
+.boton{
+  background-color: $detalle;
+  color: $fondo;
+  text-transform: uppercase;
+  font-size: .8rem;
+  text-decoration: none;
+  padding: 1rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px #888888; /* agregar sombra en el lado inferior derecho */
+  transition-duration: 0.4s;
+  &:hover{
+    opacity: .7;
+    color: white;
+    box-shadow: 4px 4px 8px #888888; 
+  }
+  i{
+    color: $fondo;
+    margin: .5rem;
+  }
+}
+
+
+
+// LOADER
+.contenido {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255,0);
+  padding-bottom: 5rem;
+  i {
+    position: absolute;
+    font-size: 2rem;
+    color: $letra;
+  }
+}
+
+.spinner {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 5px solid $letra;
+  background: transparent;
+  border-top-color: $detalle6;
+  border-bottom-color: $detalle6;
+  border-right-color: $detalle6;
+  border-left-color: $letra;
+  animation: spin 4s linear infinite;
+  position: relative;
+}
+
+@keyframes spin {
+  0% {
+    background: transparent;
+    transform: rotate(720deg);
+  }
+}
+
+// .file-select {
+//   position: relative;
+//   display: inline-block;
+// }
+
+// .file-select::before {
+//   background-color: $detalle;
+//   color: white;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   border-radius: 3px;
+//   content: 'Seleccionar foto'; /* testo por defecto */
+//   position: absolute;
+//   left: 0;
+//   right: 0;
+//   top: 0;
+//   bottom: 0;
+// }
+
+// .file-select input[type="file"] {
+//   opacity: 0;
+//   width: auto;
+//   height: auto;
+//   display: inline-block;
+// }
+.cajaUpload{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 5rem;
+}
+.cuadro{
+  border-bottom: 2px solid grey;
+}
+.btnCant {
+  border: none;
+  font-size: 1rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  transition-duration: 0.4s;
+  &:hover {
+    opacity: 0.7;
+    box-shadow: 4px 4px 8px #888888; 
+  }
+}
+.gris{
+  color: rgba(128, 128, 128, 0.7);
+  font-size: .8rem;
+}
+.inputStock{
+  width: 2.5rem;
+  text-align: center;
+}
+.modal-dialog {
+  width: fit-content;
+  height: fit-content;
+  margin-right: 0; 
+  margin-top: 7rem;
+  margin-left: auto;
+  border-radius: 0;
+  @include desktop{
+    margin-top: 3.9rem;
+  }
+}
+.modal-backdrop {
+  width: fit-content;
+  height: fit-content;
+ 
+}

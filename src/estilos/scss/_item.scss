@@ -1,0 +1,117 @@
+.item {
+  .link {
+    text-decoration: none;
+  }
+  .row {
+    --bs-gutter-x: 0rem;
+  }
+  .card {
+    padding: 1rem;
+  }
+  .tachado {
+    text-decoration: line-through !important;
+    color: grey;
+    font-size: 0.8rem;
+  }
+  .letraGris {
+    color: grey;
+    font-size: 0.8rem;
+    font-weight: 200;
+  }
+  .card {
+    border: none;
+    border-radius: none;
+    &:hover {
+      background-color: rgba(128, 128, 128, 0.1);
+    }
+  }
+  .card-img {
+    border: none;
+    border-radius: none;
+  }
+  h4 {
+    font-size: 0.8rem;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+  p {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  .cartel{
+    display: flex;
+    justify-content: flex-end;
+    .seisSin{
+      background-color: $detalle8;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      color: white;
+      padding-left: 1rem;
+      padding-right: 1rem
+    }
+    .ahorro{
+      background-color: rgba(255, 0, 0,.8);
+      width: fit-content;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      color: white;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      align-self: flex-end;
+    }
+  }
+  
+}
+.detalle {
+  margin: auto;
+  max-width: 1200px;
+  .card {
+    border: none;
+    padding: 0rem;
+    @include desktop {
+      padding: 2rem;
+    }
+  }
+
+  h1 {
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  h4 {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .datos {
+    min-height: 0;
+    display: flex;
+    justify-content: space-between;
+    @include desktop {
+      min-height: 50vh;
+    }
+  }
+  select:focus {
+    outline: none;
+  }
+  .pModal {
+    display: inline;
+    cursor: pointer;
+  }
+}
+#agregarAlCarrito {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  @include desktop {
+    flex-direction: row;
+  }
+  a {
+    width: fit-content;
+  }
+}
