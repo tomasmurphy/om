@@ -102,7 +102,7 @@ const Show = () => {
          
         </>
       ) : (
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="col">
               <div className="d-flex flex-column flex-md-row text-center mb-2">
@@ -110,31 +110,27 @@ const Show = () => {
                 <input className="col-12 col-md-8 ps-2 ms-md-3" type="text" placeholder="Buscar productos" value={searchTerm} onChange={handleSearchChange} />
 
               </div>
-              <div className="row ">
-                <div className="col-6 fw-bold">Título</div>
-                <div className="col-4 ps-2 fw-bold">Stock</div>
-                <div className="d-flex text-center col-2 fw-bold">
-                  <p className="text-center">Acciones</p>
-                </div>
-              </div>
+              
               {filteredProducts.map((product) => (
                 <div className="row cuadro" key={product.id}>
-                  <div className="col-6">{product.titulo}</div>
-                  <div className="col-4">
+                  <div className="col-6 mx-0 px0">{product.titulo}</div>
+                  <div className="col-4 mx-0 px0">
                                       <StockControl id={product.id}
                       getProducts={getProducts}></StockControl>
                   </div>
-                  <div className="d-flex col-2">
+                  <div className="d-flex col-2 mx-0 px0">
                     <Edit
                       id={product.id}
                       getProducts={getProducts}
                     ></Edit>
+                    <div>
                     <i
                       onClick={() => {
                         confirmDelete(product.id);
                       }}
-                      className=" btn bi bi-trash3"
+                      className=" btnCant bi bi-trash3"
                     ></i>
+                    </div>
                   </div>
                 </div>
               ))}

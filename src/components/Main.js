@@ -37,7 +37,7 @@ const Main = () => {
                     </div>
                     <BannerPromo></BannerPromo>
                 </>
-                : <div className="container-fluid">
+                : <div className="container-fluid sinBorde">
                     <Routes >
                         <Route path='/' element={<Home />} />
                         <Route path='/categoria/' element={<ItemListContainer />} />

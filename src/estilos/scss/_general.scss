@@ -45,7 +45,7 @@ $detalle2: rgba(0,0,0, 0);
   margin-bottom: .5rem;
   border-radius: 1rem;
   cursor: pointer;
-  box-shadow: 2px 2px 4px #888888; /* agregar sombra en el lado inferior derecho */
+  box-shadow: 2px 2px 4px #888888;
   transition-duration: 0.4s;
   &:hover{
     opacity: .7;
@@ -134,7 +134,7 @@ $detalle2: rgba(0,0,0, 0);
 }
 .btnCant {
   border: none;
-  font-size: 1rem;
+  font-size: .8rem;
   padding-left: 0.3rem;
   padding-right: 0.3rem;
   margin-left: 0.3rem;
@@ -150,22 +150,40 @@ $detalle2: rgba(0,0,0, 0);
   font-size: .8rem;
 }
 .inputStock{
-  width: 2.5rem;
+  width: 2rem;
   text-align: center;
 }
 .modal-dialog {
-  width: fit-content;
+  width: 100vw;
   height: fit-content;
   margin-right: 0; 
   margin-top: 7rem;
   margin-left: auto;
   border-radius: 0;
   @include desktop{
-    margin-top: 3.9rem;
+    margin-top: 3.7rem;
+    width: fit-content;
+
   }
 }
 .modal-backdrop {
-  width: fit-content;
+  width: 100vw;
   height: fit-content;
- 
+@include desktop{
+  width: fit-content;
+} 
+}
+.modal-content{
+  border: none;
+  border-radius: 0;
+  box-shadow: 4px 4px 8px #888888;
+  @include desktop{
+  border-bottom-left-radius: 1rem;
+  }
+}
+.input-group {
+  justify-content: space-between;
+ @include desktop{
+  justify-content: flex-end;
+ } 
 }

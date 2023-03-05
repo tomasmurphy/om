@@ -65,7 +65,7 @@ const Login = ({ onLoginSuccess }) => {
       </div>
     ) : (
 <>
-<div className='d-flex justify-content-center'>
+<div className='mt-5 d-flex justify-content-center'>
       <Link to="/">
 <img src={logoMobile} width="300" alt="logo optimarket OK" />
 </Link>

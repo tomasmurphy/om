@@ -74,7 +74,7 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
   return (
     <>
       <div className="" onClick={handleShow}>
-      <i className="btn bi bi-pencil-square"></i>
+      <i className="btnCant bi bi-pencil-square"></i>
       </div>
       <Modal
         show={show}
