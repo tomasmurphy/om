@@ -71,7 +71,7 @@ const widthBanner = (windowWidth > 700)?windowWidth/3:windowWidth
       ) 
       : 
 <div className="promoHomeWrapper sinBorde">
-<Link to={`/categoria`} 
+<div  
 style={{
         backgroundImage: `url('${img}')`,
         backgroundSize: "100% auto",
@@ -91,8 +91,10 @@ style={{
     <div className="col-1">  
   <div className='bordeGrisDer col-1'></div>
   </div>
-  <h1 className="textoBajo text-center"> {items[0].titulo} </h1>
-</Link>
+  {/* <h1 className="textoBajo text-center"> {items[0].titulo} </h1> */}
+  <Link to={`/categoria`}><h1 className="textoBajo text-center boton"> Ver todos los modelos! </h1></Link>
+  
+</div>
 </div>
       }
     </>

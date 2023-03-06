@@ -13,6 +13,29 @@ export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
     
   };
   const cantidadEnCart = cantidadSeleccionada(itemDetail.id);
+  const settings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    autoplay: false,
+    autoplaySpeed: 2000,
+    cssEase: "linear",
+    responsive: [
+      {
+        breakpoint: 678,
+        settings: {
+          slidesToShow: 1,
+          arrows:false,
+          autoplay: true,
+          autoplaySpeed: 2000,
+        },
+      },
+    ],
+  };
 
 
   return (
@@ -24,9 +47,9 @@ export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
       />
 
       <div className='row'>
-        <div className="card col-12 col-md-6 ps-md-5 pe-md-5 pe-3 ps-3 mt-3" key={itemDetail.id}>
+        <div className="card col-12 col-md-6 ps-md-5 pe-md-5 mt-md-3" key={itemDetail.id}>
 
-          <Carousel>
+          <Carousel settings={settings}>
             {itemDetail.imagenes.map(img =>
               <div key={itemDetail.id}><img src={img.url} alt={itemDetail.titulo} className="img-fluid" /></div>
             )}
@@ -35,7 +58,7 @@ export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
         <div className="card pe-3 ps-3 datos mt-3 col-12 col-md-6">
           <div>
             <h1>{itemDetail.titulo}</h1>
-            <h4 className='gris'>stock:{itemDetail.stock}  </h4>  
+            <h4 className='gris'>{itemDetail.categoria} / stock:{itemDetail.stock}  </h4>  
           </div>
           <div className='mt-3' dangerouslySetInnerHTML={{ __html: itemDetail.descripcion }} />
           
