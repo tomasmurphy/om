@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  getDoc,
+  onSnapshot,
   collection,
-  getDocs,
   deleteDoc,
   doc,
+  getDoc
 } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Swal from "sweetalert2";
@@ -22,38 +22,30 @@ const Show = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const productsCollection = collection(dataBase, "items");
-  
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const getProducts = async () => {
-    const data = await getDocs(productsCollection);
-    const productos = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    const productosOrdenados = productos.sort((a, b) => {
-      if (a.categoria === b.categoria) {
-        return a.titulo.localeCompare(b.titulo);
-      }
-      return a.categoria.localeCompare(b.categoria);
-    });
-    setProducts(productosOrdenados);
-    setFilteredProducts(productosOrdenados);
-  };
-  
-  
-  const filterProducts = (productos, searchTerm) => {
-    return productos.filter((producto) => {
-      return producto.titulo.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-  };
-
   useEffect(() => {
-    getProducts();
-    // eslint-disable-next-line
+    const unsubscribe = onSnapshot(productsCollection, (snapshot) => {
+      const productos = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      const productosOrdenados = productos.sort((a, b) => {
+        if (a.categoria === b.categoria) {
+          return a.titulo.localeCompare(b.titulo);
+        }
+        return a.categoria.localeCompare(b.categoria);
+      });
+      setProducts(productosOrdenados);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    const productosFiltrados = filterProducts(products, searchTerm);
+    const productosFiltrados = products.filter((producto) => {
+      return producto.titulo.toLowerCase().includes(searchTerm.toLowerCase());
+    });
     setFilteredProducts(productosFiltrados);
   }, [products, searchTerm]);
 
@@ -64,7 +56,6 @@ const Show = () => {
     productImagenes.map((img) => borrarImagen(img.name));
     await deleteDoc(productDoc);
     console.log(productDoc);
-    getProducts();
   };
 
   const confirmDelete = (id) => {
@@ -83,8 +74,9 @@ const Show = () => {
         deleteProduct(id);
         Swal.fire("Borrado!", "Chau tu producto", "success");
       }
-    });
-  };
+    });}
+ 
+
   const borrarImagen = (img) => {
     const desertRef = ref(storage, `/files/${img}`);
     deleteObject(desertRef)
@@ -103,6 +95,15 @@ const Show = () => {
     setLoggedIn(isLogin);
   };
   
+  const updateProduct = (updatedProduct) => {
+    setProducts(products.map((product) => {
+      if (product.id === updatedProduct.id) {
+        return updatedProduct;
+      } else {
+        return product;
+      }
+    }));
+  };
   return (
     <>
     <Login onLoginSuccess={handleLoginSuccess}></Login>
@@ -116,7 +117,7 @@ const Show = () => {
             <div className="col">
               <div className="d-flex flex-column justify-content-around flex-md-row text-center mb-2">
                 {/* <MyComponent></MyComponent> */}
-                <Create className="col-6 col-md-4 " getProducts={getProducts}></Create>
+                <Create className="col-6 col-md-4 " getProducts={updateProduct}></Create>
                 <Categorias className="col-6 col-md-2 "></Categorias>
                 <input className="col-12 col-md-6 ps-2 ms-md-3" type="text" placeholder="Buscar productos" value={searchTerm} onChange={handleSearchChange} />
 
@@ -148,7 +149,7 @@ const Show = () => {
                   <div className="d-flex col-2 mx-0 px0">
                     <Edit
                       id={product.id}
-                      getProducts={getProducts}
+                      getProducts={updateProduct}
                     ></Edit>
                     <div>
                     <i
