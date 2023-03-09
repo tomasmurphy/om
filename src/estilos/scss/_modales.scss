@@ -1,0 +1,32 @@
+
+.modal-dialog-cart {
+    width: 100vw;
+    height: fit-content;
+    margin-right: 0; 
+    margin-top: 7rem;
+    margin-left: auto;
+    border-radius: 0;
+    @include desktop{
+      margin-top: 3.7rem;
+      width: fit-content;
+  
+    }
+  }
+  .modal-backdrop-cart {
+    width: 100vw;
+    height: fit-content;
+  @include desktop{
+    width: fit-content;
+  } 
+  }
+  .modal-content-cart{
+    border: none;
+    border-radius: 0;
+    box-shadow: 4px 4px 8px #888888;
+    @include desktop{
+    border-bottom-left-radius: 1rem;
+    }
+  }
+  .modal-content{
+    box-shadow: 4px 4px 8px #888888;
+  }

@@ -19,6 +19,9 @@ const Cart = (props) => {
                 style={{
                     borderRadius: "0",
                 }}
+                dialogClassName="modal-dialog-cart"
+                backdropClassName="modal-backdrop-cart"
+                contentClassName="modal-content-cart"
 
             >
                 <Modal.Body>

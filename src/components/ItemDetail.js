@@ -3,6 +3,7 @@ import { CartContext } from '../context/CartContext';
 import ItemCount from './ItemCount';
 import Carousel from './Carousel';
 import Seo from './Head';
+import Anteojo from './Anteojo'
 
 export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
   const { addToCart, cantidadSeleccionada } = useContext(CartContext)
@@ -61,7 +62,7 @@ export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
             <h4 className='gris'>{itemDetail.categoria} / stock:{itemDetail.stock}  </h4>  
           </div>
           <div className='mt-3' dangerouslySetInnerHTML={{ __html: itemDetail.descripcion }} />
-          
+          <Anteojo medidas={itemDetail.medidas}></Anteojo> 
             
           <div className='mt-3'>   
           
@@ -71,12 +72,17 @@ export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
             <h4><i className="bi bi-truck me-2"></i>Envíos a todo el país!</h4>
             <h4><i className="bi bi-person-check me-2"></i>Asesoramiento personalizado</h4>
             
-            
           </div>
           
+            
           <h4 className='text-center text-md-start mt-3'><ItemCount stock={itemDetail.stock} initial={(cantidadEnCart === undefined) ? 1 : cantidadEnCart} onAdd={onAdd} />
           </h4>
+          
+  
+
         </div>
+       
+
       </div>
     </>)
 

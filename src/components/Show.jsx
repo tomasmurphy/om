@@ -14,6 +14,9 @@ import { storage } from "../firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
 import Login from "./Login";
 import StockControl from "./StockControl";
+import Categorias from './Categorias'
+import { MyComponent } from "./CargaMasiva";
+
 const Show = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -26,11 +29,17 @@ const Show = () => {
 
   const getProducts = async () => {
     const data = await getDocs(productsCollection);
-    const productos = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    const productosOrdenados = productos.sort((a, b) => (a.titulo > b.titulo) ? 1 : -1);
+    const productos = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const productosOrdenados = productos.sort((a, b) => {
+      if (a.categoria === b.categoria) {
+        return a.titulo.localeCompare(b.titulo);
+      }
+      return a.categoria.localeCompare(b.categoria);
+    });
     setProducts(productosOrdenados);
     setFilteredProducts(productosOrdenados);
   };
+  
   
   const filterProducts = (productos, searchTerm) => {
     return productos.filter((producto) => {
@@ -105,19 +114,37 @@ const Show = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col">
-              <div className="d-flex flex-column flex-md-row text-center mb-2">
-                <Create className="col-12 col-md-4 " getProducts={getProducts}></Create>
-                <input className="col-12 col-md-8 ps-2 ms-md-3" type="text" placeholder="Buscar productos" value={searchTerm} onChange={handleSearchChange} />
+              <div className="d-flex flex-column justify-content-around flex-md-row text-center mb-2">
+                {/* <MyComponent></MyComponent> */}
+                <Create className="col-6 col-md-4 " getProducts={getProducts}></Create>
+                <Categorias className="col-6 col-md-2 "></Categorias>
+                <input className="col-12 col-md-6 ps-2 ms-md-3" type="text" placeholder="Buscar productos" value={searchTerm} onChange={handleSearchChange} />
 
               </div>
-              
+              <div className="row cuadro" key="titles">
+  <div className="col-2 mx-0 px0">Categoría</div>
+  <div className="col-6 col-md-2 mx-0 px0">Título</div>
+  <div className="col-2 mx-0 px0">Proveedor</div>
+  <div className="col-2 mx-0 px0">Descripción</div>
+  <div className="col-2 mx-0 px0">Stock</div>
+  <div className="col-2 mx-0 px0">Editar/Borrar</div>
+</div>
               {filteredProducts.map((product) => (
                 <div className="row cuadro" key={product.id}>
-                  <div className="col-6 mx-0 px0">{product.titulo}</div>
-                  <div className="col-4 mx-0 px0">
+                  <div className="col-2 mx-0 px0">{product.categoria}
+                  </div>
+                  <div className="col-6 col-md-2 mx-0 px0">{product.titulo}
+                  </div>
+                  <div className="col-2  mx-0 px0">{product.proveedor}
+                  </div>
+                  <div className="col-2 descripcion"dangerouslySetInnerHTML={{ __html: product.descripcion }} />
+                  
+                  <div className="col-2  mx-0 px0">{product.stock}
+                  </div>
+                  {/* <div className="col-4 mx-0 px0">
                                       <StockControl id={product.id}
                       getProducts={getProducts}></StockControl>
-                  </div>
+                  </div> */}
                   <div className="d-flex col-2 mx-0 px0">
                     <Edit
                       id={product.id}

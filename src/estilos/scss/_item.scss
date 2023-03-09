@@ -2,6 +2,16 @@
   padding: .3rem;
   .link {
     text-decoration: none;
+    img{
+      @include desktop{
+        opacity: .3;
+        &:hover{
+          opacity:1;
+          box-shadow: 4px 4px 8px #888888;
+          transition-duration: 0.4s;;
+        }
+      }
+    }
   }
   .row {
     --bs-gutter-x: 0rem;
@@ -22,9 +32,7 @@
   .card {
     border: none;
     border-radius: none;
-    &:hover {
-      background-color: rgba(128, 128, 128, 0.1);
-    }
+    
   }
   .card-img {
     border: none;

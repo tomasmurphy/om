@@ -4,6 +4,7 @@ import { dataBase } from "../firebaseConfig";
 import Modal from "react-bootstrap/Modal";
 import ImagenUpload from "./ImageUpload";
 import { Editor } from "./MostrarImagen";
+import SelectCategoria from "./SelectCategoria";
 
 const Create = ({ getProducts }) => {
   const [categoria, setCategoria] = useState("");
@@ -23,7 +24,7 @@ const Create = ({ getProducts }) => {
     } else {
       setImagenes([...imagenes, img]);
     }
-    console.log(imagenes);
+    
   };
   const store = async (e) => {
     e.preventDefault();
@@ -48,19 +49,23 @@ const Create = ({ getProducts }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  // const [isChecked, setIsChecked] = useState(true);
-  // const handleChange = () => {
-  //   setIsChecked(!isChecked);
-  //   setStatus(!isChecked);
-  // };
+  
   const cargarDescripcion = (descripcion) => {
-setDescripcion(descripcion)
+  setDescripcion(descripcion)
   }
   const handleDescripcionChange = (value) => {
     setDescripcion(value);
     cargarDescripcion(value);
   };
+
+  const cargarCategoria = (categoria) => {
+    setCategoria(categoria)
+    }
+    const handleCategoriaChange = (value) => {
+      setCategoria(value);
+      cargarCategoria(value);
+    };
+  
   
   return (
     <>
@@ -85,19 +90,16 @@ setDescripcion(descripcion)
                 <div className="mb-3 row cajaUpload">
                   <div className="col-4 text-center ">
                     <ImagenUpload
-                      updateFile={{ name: "", url: "" }}
                       subirImagenes={subirImagenes}
                     ></ImagenUpload>
                   </div>
                   <div className="col-4 text-center">
                     <ImagenUpload
-                      updateFile={{ name: "", url: "" }}
                       subirImagenes={subirImagenes}
                     ></ImagenUpload>
                   </div>
                   <div className="col-4 text-center">
                     <ImagenUpload
-                      updateFile={{ name: "", url: "" }}
                       subirImagenes={subirImagenes}
                     ></ImagenUpload>
                   </div>{" "}
@@ -105,12 +107,7 @@ setDescripcion(descripcion)
                 <form onSubmit={store} className="row">
                   <div className="mb-3 col-12">
                     <label className="form-label">Categoria</label>
-                    <input
-                      value={categoria}
-                      onChange={(e) => setCategoria(e.target.value)}
-                      type="text"
-                      className="form-control"
-                    />
+                    <SelectCategoria categoria={categoria} cargarCategoria={handleCategoriaChange} />
                   </div>
                   <div className="mb-3 col-12">
                     <label className="form-label">Titulo</label>
@@ -134,25 +131,6 @@ setDescripcion(descripcion)
                       className="form-control text-center"
                     />
                   </div>
-                  {/* <div className="mb-3">
-                    <label className="form-label">Precio</label>
-                    <input
-                      value={precio}
-                      onChange={(e) => setPrecio(e.target.value)}
-                      type="number"
-                      className="form-control"
-                    />
-                  </div> */}
-
-                  {/* <div className="mb-3">
-                    <label className="form-label">Disponible </label>
-                    <input
-                      checked={isChecked}
-                      onChange={handleChange}
-                      type="checkbox"
-                      className="ms-2"
-                    />
-                  </div> */}
                   <button
                     type="submit"
                     onClick={handleClose}

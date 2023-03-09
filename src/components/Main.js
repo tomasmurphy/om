@@ -35,7 +35,7 @@ const Main = () => {
                             <Route path='/admin' element={<Show />} />
                         </Routes>
                     </div>
-                    <BannerPromo></BannerPromo>
+                    <BannerPromo handleCartModal={handleCartModal} />
                 </>
                 : <div className="container-fluid sinBorde">
                     <Routes >

@@ -6,24 +6,20 @@ const Form = ({ cart, handleModal, clearCart }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = (event) => {
-        // eslint-disable-next-line no-restricted-globals
-        let celu = screen.width < 990 ? "api" : "web";
-        let mensaje = ""
-
-
-        setIsLoading(true)
         event.preventDefault();
-        cart.map(prod =>
-            mensaje += `👓 ${prod.titulo} / `
-        )
-        const whatsapp = (cart.length === 0)?"Hola *Optimarket OK!* 👓":`Hola *Optimarket OK!*. Me interesan estos marcos ${mensaje}`
-        let linkCompra = `https://${celu}.whatsapp.com/send?phone=5491151063324&text=${whatsapp}`;
+
+        const celu = window.innerWidth < 990 ? "api" : "web";
+        const mensaje = cart.reduce((acc, prod) => `${acc}👓 ${prod.titulo} / `, "");
+        const whatsapp = (cart.length === 0) ? "Hola *Optimarket OK!* 👓" : `Hola *Optimarket OK!*. Me interesan estos marcos ${mensaje}`;
+        const linkCompra = `https://${celu}.whatsapp.com/send?phone=5493774411192&text=${whatsapp}`;
+
+        setIsLoading(true);
+
+        window.open(linkCompra, '_blank');
 
         clearCart();
-
-        window.open(linkCompra, '_blank')
-        handleModal()
-        setIsLoading(false)
+        handleModal();
+        setIsLoading(false);
     };
 
     return (
@@ -37,4 +33,5 @@ const Form = ({ cart, handleModal, clearCart }) => {
         </>
     )
 }
+
 export default Form;

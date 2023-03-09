@@ -4,14 +4,17 @@ import { dataBase } from "../firebaseConfig";
 import Modal from "react-bootstrap/Modal";
 import ImagenUpload from "./ImageUpload";
 import { Editor } from "./MostrarImagen";
+import SelectCategoria from "./SelectCategoria";
+import StockControl from "./StockControl";
 
-const Edit = ({ id, getProducts, stockUpdate}) => {
-
+const Edit = ({ id, getProducts, stockUpdate }) => {
   const [categoria, setCategoria] = useState("");
   const [titulo, setTitulo] = useState("");
+  const [proveedor, setProveedor] = useState("");
+  const [medidas, setMedidas] = useState([]);
   const [imagenes, setImagenes] = useState([]);
-  const [status, setStatus] = useState(true);
   const [descripcion, setDescripcion] = useState("");
+
   const subirImagenes = (img, borrar) => {
     if (borrar === 1) {
       const borrarUnaImagen = imagenes.filter((imagen) => imagen.name !== img);
@@ -20,9 +23,7 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
     } else {
       setImagenes([...imagenes, img]);
     }
-    console.log(imagenes);
   };
-
   const update = async (e) => {
     e.preventDefault();
     const product = doc(dataBase, "items", id);
@@ -30,8 +31,9 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
       categoria: categoria,
       titulo: titulo,
       descripcion: descripcion,
+      proveedor: proveedor,
+      medidas: medidas,
       imagenes: imagenes,
-      status: status,
     };
     await updateDoc(product, data);
     getProducts();
@@ -39,13 +41,14 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
 
   const getProductById = async (id) => {
     const product = await getDoc(doc(dataBase, "items", id));
+
     if (product.exists()) {
       setCategoria(product.data().categoria);
       setTitulo(product.data().titulo);
       setDescripcion(product.data().descripcion);
-      setStatus(product.data().status);
       setImagenes(product.data().imagenes);
-      console.log("soy recursiva")
+      setProveedor(product.data().proveedor);
+      setMedidas(product.data().medidas);
     } else {
       console.log("El producto no existe");
     }
@@ -59,22 +62,25 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const [isChecked, setIsChecked] = useState(status);
-  // const handleChange = () => {
-  //   setIsChecked(!isChecked);
-  //   setStatus(!isChecked);
-  // };
   const cargarDescripcion = (descripcion) => {
-    setDescripcion(descripcion)
-      }
-      const handleDescripcionChange = (value) => {
-        setDescripcion(value);
-        cargarDescripcion(value);
-      };
+    setDescripcion(descripcion);
+  };
+  const handleDescripcionChange = (value) => {
+    setDescripcion(value);
+    cargarDescripcion(value);
+  };
+
+  const cargarCategoria = (categoria) => {
+    setCategoria(categoria);
+  };
+  const handleCategoriaChange = (value) => {
+    setCategoria(value);
+    cargarCategoria(value);
+  };
   return (
     <>
       <div className="" onClick={handleShow}>
-      <i className="btnCant bi bi-pencil-square"></i>
+        <i className="btnCant bi bi-pencil-square"></i>
       </div>
       <Modal
         show={show}
@@ -91,55 +97,54 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
           <div className="container">
             <div className="row">
               <div className="col">
-              <div className="mb-3 row cajaUpload">
-                  <div className="col-4 text-center ">      
-                  {imagenes[0] === undefined ? (
-                    <ImagenUpload
-                      updateFile={{ name: "", url: "" }}
-                      subirImagenes={subirImagenes}
-                    ></ImagenUpload>
-                  ) : (
-                    <ImagenUpload
-                      updateFile={imagenes[0]}
-                      subirImagenes={subirImagenes}
-                    ></ImagenUpload>
-                  )}
+                {/* <StockControl/> */}
+                <div className="mb-3 row cajaUpload">
+                  <div className="col-4 text-center ">
+                    {imagenes[0] === undefined ? (
+                      <ImagenUpload
+                        updateFile={{ name: "", url: "" }}
+                        subirImagenes={subirImagenes}
+                      ></ImagenUpload>
+                    ) : (
+                      <ImagenUpload
+                        updateFile={imagenes[0]}
+                        subirImagenes={subirImagenes}
+                      ></ImagenUpload>
+                    )}
                   </div>
                   <div className="col-4 text-center ">
-                  {imagenes[1] === undefined ? (
-                    <ImagenUpload
-                      updateFile={{ name: "", url: "" }}
-                      subirImagenes={subirImagenes}
-                    ></ImagenUpload>
-                  ) : (
-                    <ImagenUpload
-                      updateFile={imagenes[1]}
-                      subirImagenes={subirImagenes}
-                    ></ImagenUpload>
-                  )}
+                    {imagenes[1] === undefined ? (
+                      <ImagenUpload
+                        updateFile={{ name: "", url: "" }}
+                        subirImagenes={subirImagenes}
+                      ></ImagenUpload>
+                    ) : (
+                      <ImagenUpload
+                        updateFile={imagenes[1]}
+                        subirImagenes={subirImagenes}
+                      ></ImagenUpload>
+                    )}
                   </div>
                   <div className="col-4 text-center ">
-                  {imagenes[2] === undefined ? (
-                    <ImagenUpload
-                      updateFile={{ name: "", url: "" }}
-                      subirImagenes={subirImagenes}
-                    ></ImagenUpload>
-                  ) : (
-                    <ImagenUpload
-                      updateFile={imagenes[2]}
-                      subirImagenes={subirImagenes}
-                    ></ImagenUpload>
-                  )}
+                    {imagenes[2] === undefined ? (
+                      <ImagenUpload
+                        updateFile={{ name: "", url: "" }}
+                        subirImagenes={subirImagenes}
+                      ></ImagenUpload>
+                    ) : (
+                      <ImagenUpload
+                        updateFile={imagenes[2]}
+                        subirImagenes={subirImagenes}
+                      ></ImagenUpload>
+                    )}
                   </div>
                 </div>
                 <form onSubmit={update} className="row">
                   <div className="mb-3 col-12">
                     <label className="form-label">Categoria</label>
-                    <input
-                      value={categoria}
-                      onChange={(e) => setCategoria(e.target.value)}
-                      type="text"
-                      className="form-control"
+                    <SelectCategoria
+                      categoria={categoria}
+                      cargarCategoria={handleCategoriaChange}
                     />
                   </div>
                   <div className="mb-3 col-12">
@@ -153,8 +158,56 @@ const Edit = ({ id, getProducts, stockUpdate}) => {
                   </div>
                   <div className="mb-3 col-12">
                     <label className="form-label">Descripcion</label>
-                    <Editor descripcion={descripcion} cargarDescripcion={handleDescripcionChange}></Editor>
+                    <Editor
+                      descripcion={descripcion}
+                      cargarDescripcion={handleDescripcionChange}
+                    ></Editor>
                   </div>
+                  <div className="mb-3 col-12">
+                    <label className="form-label">Proveedor</label>
+                    <input
+                      value={proveedor}
+                      onChange={(e) => setProveedor(e.target.value)}
+                      type="text"
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3 col-4">
+                    <label className="form-label">Ancho</label>
+                    <input
+                      value={medidas[0]?.ancho || ""}
+                      onChange={(e) =>
+                        setMedidas([{ ...medidas[0], ancho: e.target.value }])
+                      }
+                      type="number"
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3 col-4">
+                    <label className="form-label">Alto</label>
+                    <input
+                      value={medidas[0]?.alto || ""}
+                      onChange={(e) =>
+                        setMedidas([{ ...medidas[0], alto: e.target.value }])
+                      }
+                      type="number"
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="mb-3 col-4">
+                    <label className="form-label">Patilla</label>
+                    <input
+                      value={medidas[0]?.patilla || ""}
+                      onChange={(e) =>
+                        setMedidas([{ ...medidas[0], patilla: e.target.value }])
+                      }
+                      type="number"
+                      className="form-control"
+                    />
+                  </div>
+                  
                   <button
                     type="submit"
                     onClick={handleClose}

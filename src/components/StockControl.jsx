@@ -1,27 +1,20 @@
 import { useEffect, useState } from "react";
 import { getDoc, updateDoc, doc } from "firebase/firestore";
+import Swal from "sweetalert2";
+
 import { dataBase } from "../firebaseConfig";
 
 const StockControl = ({ id }) => {
-  const [stock, setStock] = useState(0);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [formData, setFormData] = useState({ stock: 0, isUpdating: false });
+  const [success, setSuccess] = useState(false);
 
-  const update = async (e) => {
-    e.preventDefault();
-    setIsUpdating(false);
-    const product = doc(dataBase, "items", id);
-    const data = {
-      stock,
-    };
-    await updateDoc(product, data);
-    // setIsUpdating(false);
-  };
+  const { stock, isUpdating } = formData;
 
   useEffect(() => {
     const getProductById = async (id) => {
       const product = await getDoc(doc(dataBase, "items", id));
       if (product.exists()) {
-        setStock(product.data().stock);
+        setFormData({ ...formData, stock: product.data().stock });
       } else {
         console.log("El producto no existe");
       }
@@ -30,14 +23,35 @@ const StockControl = ({ id }) => {
     getProductById(id);
   }, [id]);
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    const product = doc(dataBase, "items", id);
+    const data = { stock };
+
+    await updateDoc(product, data);
+
+    setSuccess(true);
+    setFormData({ ...formData, isUpdating: false });
+  };
+
+  const handleIncrement = () => {
+    setFormData({ ...formData, stock: stock + 1, isUpdating: true });
+  };
+
+  const handleDecrement = () => {
+    setFormData({ ...formData, stock: stock - 1, isUpdating: true });
+  };
+
   return (
     <>
-      <form onSubmit={update} className="row">
+      <form onSubmit={handleUpdate} className="row">
         <div className="input-group">
           <button
-            type="button"
             className="btnCant"
-            onClick={() => setStock(stock - 1, setIsUpdating(true))}
+            type="button"
+            onClick={handleDecrement}
+            disabled={isUpdating}
           >
             -
           </button>
@@ -45,26 +59,34 @@ const StockControl = ({ id }) => {
             type="number"
             className="inputStock"
             value={stock}
-            onChange={(e) => setStock(parseInt(e.target.value, setIsUpdating(true)))}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                stock: parseInt(e.target.value),
+                isUpdating: true,
+              })
+            }
           />
           <button
-            type="button"
             className="btnCant"
-            onClick={() => setStock(stock + 1, setIsUpdating(true))}
+            type="button"
+            onClick={handleIncrement}
+            disabled={isUpdating}
           >
             +
           </button>
-          <button 
-          className="btnCant" type="submit">
-            {isUpdating ?<i style={{
-            color: "red",
-          }} className=" bi bi-check-square-fill"></i>
-            :<i style={{
-              color: "green",
-            }} className=" bi bi-check-square-fill"></i>}
-          </button>
+          {isUpdating ? (
+            <button className="btnCant" type="submit">
+              <i style={{ color: "red" }} className=" bi bi-check-square-fill"></i>
+            </button>
+          ) : null}
         </div>
       </form>
+      {success && (
+        <div className="alert alert-success" role="alert">
+          ¡Actualizado! Si obse, ya lo actualicé
+        </div>
+      )}
     </>
   );
 };

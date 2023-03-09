@@ -5,6 +5,8 @@ import { dataBase } from "../firebaseConfig";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Seo from "./Head";
+import desktop from '../img/bannerdesktop.jpg'
+import mobile from '../img/bannermobile.jpg'
 
 const Home = () => {
   window.scrollTo(0, 0);
@@ -55,7 +57,8 @@ useEffect(() => {
     window.removeEventListener("resize", handleResize);
   };
 }, []);
-const img = (windowWidth > 700)?img1:img2
+// const img = (windowWidth > 700)?img1:img2
+const img = (windowWidth > 700)?desktop:mobile
 const widthBanner = (windowWidth > 700)?windowWidth/3:windowWidth
 
   return (

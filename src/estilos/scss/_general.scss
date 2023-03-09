@@ -140,6 +140,7 @@ $detalle2: rgba(0,0,0, 0);
   margin-left: 0.3rem;
   margin-right: 0.3rem;
   transition-duration: 0.4s;
+  cursor: pointer;
   &:hover {
     opacity: 0.7;
     box-shadow: 4px 4px 8px #888888; 
@@ -153,37 +154,13 @@ $detalle2: rgba(0,0,0, 0);
   width: 2rem;
   text-align: center;
 }
-.modal-dialog {
-  width: 100vw;
-  height: fit-content;
-  margin-right: 0; 
-  margin-top: 7rem;
-  margin-left: auto;
-  border-radius: 0;
-  @include desktop{
-    margin-top: 3.7rem;
-    width: fit-content;
 
-  }
-}
-.modal-backdrop {
-  width: 100vw;
-  height: fit-content;
-@include desktop{
-  width: fit-content;
-} 
-}
-.modal-content{
-  border: none;
-  border-radius: 0;
-  box-shadow: 4px 4px 8px #888888;
-  @include desktop{
-  border-bottom-left-radius: 1rem;
-  }
-}
 .input-group {
-  justify-content: space-between;
- @include desktop{
   justify-content: flex-end;
- } 
+ 
 }
+.descripcion{
+  p{
+  margin-bottom: 0;}
+}
+

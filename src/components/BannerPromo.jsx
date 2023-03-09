@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "./Carousel";
-
+import ModalesPromo from "./ModalesPromo";
 const settings = {
   dots: false,
   arrows: false,
@@ -16,46 +16,42 @@ const settings = {
     {
       breakpoint: 678,
       settings: {
-        slidesToShow: 1,
-        autoplay: true,
-        autoplaySpeed: 2000,
+        dots: false,
+  arrows: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  initialSlide: 0,
+  autoplay: true,
+  autoplaySpeed: 3000,
+  cssEase: "linear",
       },
     },
   ],
 };
 
-const BannerPromo = () => {
+
+const BannerPromo = (props) => {
   return (
     <>
       <section className="pad bannerPromo item">
         <div className="row">
           <Carousel settings={settings}>
-            <div>
-              <i className="bi bi-credit-card-2-back"></i>
-              <p>Todos los medios de pago!</p>
-            </div>
-            <div>
-              {" "}
-              <i className="bi bi-truck"></i>
-              <p>Envíos a todo el país!</p>
-            </div>
-            <div>
-              <i className="bi bi-person-check"></i>
-              <p>Asesoramiento personalizado</p>
-            </div>
-            <div>
-              <i className="bi bi-credit-card-2-back"></i>
-              <p>Todos los medios de pago!</p>
-            </div>
-            <div>
-              {" "}
-              <i className="bi bi-truck"></i>
-              <p>Envíos a todo el país!</p>
-            </div>
-            <div>
-              <i className="bi bi-person-check"></i>
-              <p>Asesoramiento personalizado</p>
-            </div>
+            <ModalesPromo 
+            classPromo="bi bi-credit-card-2-back"
+            tituloPromo="Todos los medios de pago" />
+            
+            <ModalesPromo 
+            classPromo="bi bi-truck"
+            tituloPromo="Envíos a todo el país!" />
+            
+            <ModalesPromo 
+            classPromo="bi bi-person-check"
+            tituloPromo="Asesoramiento personalizado"
+            handleCartModal={props.handleCartModal} />
+            
+            
           </Carousel>
         </div>
       </section>

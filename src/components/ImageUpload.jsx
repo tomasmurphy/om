@@ -8,78 +8,94 @@ import {
 } from "firebase/storage";
 
 function ImageUpload({ subirImagenes, updateFile }) {
-  const [file, setFile] = useState(updateFile);
-  const [url, setUrl] = useState(updateFile.url);
+  const [fileName, setFileName] = useState(updateFile ? updateFile.name : "");
+  const [url, setUrl] = useState(updateFile ? updateFile.url : "");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFile = useCallback((event) => {
-    setIsLoading(true)
-    setFile(event.target.files[0]);
-    
-    handleUpload(event.target.files[0]);
-  }, []);
+  const handleFile = useCallback((event) => handleUpload(event.target.files[0]), [subirImagenes, fileName]);
 
   const handleUpload = async (file) => {
     let codigo = Math.floor(Math.random() * 10000);
-    console.log(codigo);
-    const storageRef = ref(storage, `/files/${file.name}${codigo}`);
+    const storageRef = ref(storage, `/files/${codigo}${file.name}`);
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-      },
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setUrl(url);
-          subirImagenes({ name: `${file.name}${codigo}`, url: url }, false);
-        });
+    // Reducir tamaño de imagen
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 900;
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          const uploadTask = uploadBytesResumable(storageRef, blob);
+
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            },
+            (err) => console.log(err),
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                setUrl(url);
+                const uploadedFileName = uploadTask.snapshot.ref.name;
+                setFileName(uploadedFileName); // Actualizar fileName con el nombre de archivo cargado
+                subirImagenes({ name: uploadedFileName, url: url }, false); // Utilizar el nombre de archivo cargado en lugar de fileName
+              });
+            }
+          );
+          setIsLoading(true);
+          uploadTask.then(() => {
+            setIsLoading(false); // Establecer isLoading a false después de la carga
+          });
+        }, 'image/jpeg', 1);
       }
-    );
-    try {
-      await uploadTask; // Esperar a que se complete la carga
-    } finally {
-      setIsLoading(false); // Establecer isLoading a false después de la carga
     }
   };
-
-  const borrarImagen = (img) => {
-    subirImagenes(file.name, 1);
-    const desertRef = ref(storage, `/files/${img}`);
-    console.log(desertRef);
-    deleteObject(desertRef)
+  
+  const borrarImagen = () => {
+    console.log(fileName)
+    if (!fileName) return;
+    subirImagenes(fileName, 1);
+    const storageRef = ref(storage, `/files/${fileName}`);
+    deleteObject(storageRef)
       .then(() => {
-        console.log("te borre");
+        console.log(`Se borró la imagen ${fileName}`);
+        setFileName("");
         setUrl("");
       })
       .catch((error) => {
-        subirImagenes(file.name, 1);
+        subirImagenes(fileName, 1);
+        setFileName("");
         setUrl("");
-        console.log(error);
+        console.log(`Error al borrar la imagen ${fileName}:`, error);
       });
   };
-  const fileInputRef = useRef();
 
+  const fileInputRef = useRef();
   return (
     <>
       {url ? (
         <>
-          <img src={url} width="100" alt={file.name} />
+          <img src={url} width="100" alt={fileName} />
           <i
-            onClick={() => borrarImagen(file.name)}
+            onClick={borrarImagen}
             className=" btn bi bi-trash3"
           ></i>
         </>
       ) : (
         <>
-      
           <button
             className="custom-file-upload fs-1 btn"
             onClick={() => fileInputRef.current.click()}
           >
-      {isLoading? <div className="fs-6">cargando...</div> :<i className="bi bi-sunglasses"></i>}
+            {isLoading ? <div className="fs-6">cargando...</div> : <i className="bi bi-sunglasses"></i>}
             <input
               className="d-none"
               ref={fileInputRef}
