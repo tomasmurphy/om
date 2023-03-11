@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useLocation } from "react-router-dom";
+import { getItems } from "./apiCrudRealTime";
 
 function NavMenu() {
   const [categories, setCategories] = useState([]);
@@ -11,23 +12,15 @@ function NavMenu() {
     var activo = ''
     location.pathname.includes('categoria') ? activo = 'active mx-0': activo="mx-0"
     
-  useEffect(() => {
-    const collectionCategoria = collection(dataBase, "categorias");
-    getDocs(collectionCategoria)
-      .then((res) => {
-        const categorias = res.docs.map((cat) => {
-          return {
-            id: cat.id,
-            ...cat.data(),
-          };
-        });
-        setCategories(categorias);
-      })
-      .catch((error) => {
+    useEffect(() => {
+      getItems().then((categorias) => {
+        const filtro = categorias.filter(item => item.hasOwnProperty("categoria"));
+        setCategories(filtro);
+      }).catch((error) => {
         console.log(error);
       });
-      
-  }, []);
+    }, []);
+    
 
   return (
     <div className="navMenu">

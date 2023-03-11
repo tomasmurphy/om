@@ -3,7 +3,7 @@ import imgPatilla from '../img/medidas4.jpg'
 
 const Anteojo = ({medidas}) => {
 
-  const {ancho, alto, patilla} = medidas[0]
+  const {ancho, alto, patilla} = medidas
 
     return (
     <>

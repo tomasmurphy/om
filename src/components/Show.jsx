@@ -4,7 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Swal from "sweetalert2";
@@ -13,9 +13,7 @@ import Create from "./Create";
 import { storage } from "../firebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
 import Login from "./Login";
-import StockControl from "./StockControl";
-import Categorias from './Categorias'
-import { MyComponent } from "./CargaMasiva";
+import Categorias from "./Categorias";
 
 const Show = () => {
   const [products, setProducts] = useState([]);
@@ -29,7 +27,13 @@ const Show = () => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(productsCollection, (snapshot) => {
-      const productos = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      const productos = snapshot.docs.map((doc) => {
+        console.log("leo desde admin");
+        return {
+          ...doc.data(),
+          id: doc.id,
+        };
+      });
       const productosOrdenados = productos.sort((a, b) => {
         if (a.categoria === b.categoria) {
           return a.titulo.localeCompare(b.titulo);
@@ -38,9 +42,11 @@ const Show = () => {
       });
       setProducts(productosOrdenados);
     });
-
+  
     return () => unsubscribe();
+    // eslint-disable-next-line
   }, []);
+  
 
   useEffect(() => {
     const productosFiltrados = products.filter((producto) => {
@@ -51,7 +57,7 @@ const Show = () => {
 
   const deleteProduct = async (id) => {
     const productDoc = doc(dataBase, "items", id);
-    const productSnapshot = await getDoc(productDoc); // Obtener el documento correspondiente
+    const productSnapshot = await getDoc(productDoc);
     const productImagenes = productSnapshot.data().imagenes;
     productImagenes.map((img) => borrarImagen(img.name));
     await deleteDoc(productDoc);
@@ -70,12 +76,11 @@ const Show = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        //llamamos a la fcion para eliminar
         deleteProduct(id);
         Swal.fire("Borrado!", "Chau tu producto", "success");
       }
-    });}
- 
+    });
+  };
 
   const borrarImagen = (img) => {
     const desertRef = ref(storage, `/files/${img}`);
@@ -88,76 +93,62 @@ const Show = () => {
       });
   };
 
-  
   const [loggedIn, setLoggedIn] = useState(true);
 
   const handleLoginSuccess = (isLogin) => {
     setLoggedIn(isLogin);
   };
-  
-  const updateProduct = (updatedProduct) => {
-    setProducts(products.map((product) => {
-      if (product.id === updatedProduct.id) {
-        return updatedProduct;
-      } else {
-        return product;
-      }
-    }));
-  };
+
   return (
     <>
-    <Login onLoginSuccess={handleLoginSuccess}></Login>
+      <Login onLoginSuccess={handleLoginSuccess}></Login>
       {loggedIn ? (
-        <> 
-         
-        </>
+        <></>
       ) : (
         <div className="container-fluid">
           <div className="row">
             <div className="col">
               <div className="d-flex flex-column justify-content-around flex-md-row text-center mb-2">
-                {/* <MyComponent></MyComponent> */}
-                <Create className="col-6 col-md-4 " getProducts={updateProduct}></Create>
+                <Create className="col-6 col-md-4 "></Create>
                 <Categorias className="col-6 col-md-2 "></Categorias>
-                <input className="col-12 col-md-6 ps-2 ms-md-3" type="text" placeholder="Buscar productos" value={searchTerm} onChange={handleSearchChange} />
-
+                <input
+                  className="col-12 col-md-6 ps-2 ms-md-3"
+                  type="text"
+                  placeholder="Buscar productos"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
               </div>
               <div className="row cuadro" key="titles">
-  <div className="col-2 mx-0 px0">Categoría</div>
-  <div className="col-6 col-md-2 mx-0 px0">Título</div>
-  <div className="col-2 mx-0 px0">Proveedor</div>
-  <div className="col-2 mx-0 px0">Descripción</div>
-  <div className="col-2 mx-0 px0">Stock</div>
-  <div className="col-2 mx-0 px0">Editar/Borrar</div>
-</div>
+                <div className="col-2 mx-0 px0">Categoría</div>
+                <div className="col-6 col-md-2 mx-0 px0">Título</div>
+                <div className="col-2 mx-0 px0">Proveedor</div>
+                <div className="col-2 mx-0 px0">Descripción</div>
+                <div className="col-2 mx-0 px0">Stock</div>
+                <div className="col-2 mx-0 px0">Editar/Borrar</div>
+              </div>
               {filteredProducts.map((product) => (
                 <div className="row cuadro" key={product.id}>
-                  <div className="col-2 mx-0 px0">{product.categoria}
+                  <div className="col-2 mx-0 px0">{product.categoria}</div>
+                  <div className="col-6 col-md-2 mx-0 px0">
+                    {product.titulo}
                   </div>
-                  <div className="col-6 col-md-2 mx-0 px0">{product.titulo}
-                  </div>
-                  <div className="col-2  mx-0 px0">{product.proveedor}
-                  </div>
-                  <div className="col-2 descripcion"dangerouslySetInnerHTML={{ __html: product.descripcion }} />
-                  
-                  <div className="col-2  mx-0 px0">{product.stock}
-                  </div>
-                  {/* <div className="col-4 mx-0 px0">
-                                      <StockControl id={product.id}
-                      getProducts={getProducts}></StockControl>
-                  </div> */}
+                  <div className="col-2  mx-0 px0">{product.proveedor}</div>
+                  <div
+                    className="col-2 descripcion"
+                    dangerouslySetInnerHTML={{ __html: product.descripcion }}
+                  />
+
+                  <div className="col-2  mx-0 px0">{product.stock}</div>
                   <div className="d-flex col-2 mx-0 px0">
-                    <Edit
-                      id={product.id}
-                      getProducts={updateProduct}
-                    ></Edit>
+                    <Edit id={product.id}></Edit>
                     <div>
-                    <i
-                      onClick={() => {
-                        confirmDelete(product.id);
-                      }}
-                      className=" btnCant bi bi-trash3"
-                    ></i>
+                      <i
+                        onClick={() => {
+                          confirmDelete(product.id);
+                        }}
+                        className=" btnCant bi bi-trash3"
+                      ></i>
                     </div>
                   </div>
                 </div>

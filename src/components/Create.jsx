@@ -3,17 +3,18 @@ import { collection, addDoc } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Modal from "react-bootstrap/Modal";
 import ImagenUpload from "./ImageUpload";
-import { Editor } from "./MostrarImagen";
 import SelectCategoria from "./SelectCategoria";
 
-const Create = ({ getProducts }) => {
+const Create = () => {
+  const [proveedor, setProveedor] = useState("");
+  const [medidas, setMedidas] = useState({ancho:"", alto:"", patilla:""});
   const [categoria, setCategoria] = useState("");
   const [titulo, setTitulo] = useState("");
-  const [status, setStatus] = useState(true);
   const [descripcion, setDescripcion] = useState("");
   const [stock, setStock] = useState(1);
   const [imagenes, setImagenes] = useState([]);
   const global = "Recetados"
+
   const productsCollection = collection(dataBase, "items");
 
   const subirImagenes = (img, borrar) => {
@@ -35,29 +36,21 @@ const Create = ({ getProducts }) => {
       global: global,
       stock: stock,
       imagenes: imagenes,
-      status: status,
+      medidas:medidas,
+      proveedor:proveedor
     });
     setCategoria("");
     setDescripcion("");
     setTitulo("");
+    setProveedor("");
+    setMedidas("")
     setImagenes([]);
-    setStatus(true);
     setStock(1);
-    getProducts();
   };
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   
-  const cargarDescripcion = (descripcion) => {
-  setDescripcion(descripcion)
-  }
-  const handleDescripcionChange = (value) => {
-    setDescripcion(value);
-    cargarDescripcion(value);
-  };
-
   const cargarCategoria = (categoria) => {
     setCategoria(categoria)
     }
@@ -105,12 +98,12 @@ const Create = ({ getProducts }) => {
                   </div>{" "}
                 </div>
                 <form onSubmit={store} className="row">
-                  <div className="mb-3 col-12">
-                    <label className="form-label">Categoria</label>
+                  <div className="d-flex mb-3 col-12">
+                    <label className="form-label col-4">Categoria</label>
                     <SelectCategoria categoria={categoria} cargarCategoria={handleCategoriaChange} />
                   </div>
-                  <div className="mb-3 col-12">
-                    <label className="form-label">Titulo</label>
+                  <div className="d-flex mb-3 col-12">
+                    <label className="form-label col-4">Titulo</label>
                     <input
                       value={titulo}
                       onChange={(e) => setTitulo(e.target.value)}
@@ -118,19 +111,88 @@ const Create = ({ getProducts }) => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3">
+                  <div className="d-flex mb-3 col-12">
+                    <label className="form-label col-4">Descripcion</label>
+                    <input
+                      value={descripcion}
+                      onChange={(e) => setDescripcion(e.target.value)}
+                      type="text"
+                      className="form-control"
+                    />
+                  </div>
+                  {/* <div className="mb-3">
                     <label className="form-label">Descripcion</label>
                     <Editor descripcion={descripcion} cargarDescripcion={handleDescripcionChange}></Editor>
-                  </div>
-                  <div className="mb-3 col-4 col-md-2">
-                    <label className="form-label">Stock</label>
+                  </div> */}
+                  <div className="d-flex mb-3 col-12">
+                    <label className="form-label col-4">Proveedor</label>
                     <input
-                      value={stock}
-                      onChange={(e) => setStock(e.target.value)}
+                      value={proveedor}
+                      onChange={(e) => setProveedor(e.target.value)}
+                      type="text"
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="mb-3 col-12 col-md-4 text-center">
+                    <label className="form-label">Stock</label>
+                    <div className="input-group">
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={() => setStock(stock - 1)}
+                      >
+                        -
+                      </button>
+                      <input
+                        value={stock}
+                        onChange={(e) => setStock(e.target.value)}
+                        type="number"
+                        className="form-control text-center"
+                      />
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={() => setStock(stock + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+<div className="col-0 col-md-2"></div>
+                  <div className="mb-3 col-4 col-md-2 text-center">
+                    <label className="form-label">Ancho</label>
+                    <input
+                      value={medidas.ancho}
+                      onChange={(e) =>
+                        setMedidas({ ...medidas, ancho: e.target.value })
+                      }
                       type="number"
                       className="form-control text-center"
                     />
                   </div>
+                  <div className="mb-3 col-4 col-md-2 text-center">
+                    <label className="form-label">Alto</label>
+                    <input
+                      value={medidas.alto}
+                      onChange={(e) =>
+                        setMedidas({ ...medidas, alto: e.target.value })
+                      }
+                      type="number"
+                      className="form-control text-center"
+                    />
+                  </div>
+                  <div className="mb-3 col-4 col-md-2 text-center">
+                    <label className="form-label">Patilla</label>
+                    <input
+                      value={medidas.patilla}
+                      onChange={(e) =>
+                        setMedidas({ ...medidas, patilla: e.target.value })
+                      }
+                      type="number"
+                      className="form-control text-center"
+                    />
+                  </div>
+
                   <button
                     type="submit"
                     onClick={handleClose}

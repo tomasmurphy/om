@@ -60,12 +60,13 @@ export const ItemDetail = ({ itemDetail, onHandleCartModal }) => {
           <div>
             <h1>{itemDetail.titulo}</h1>
             <h4 className='gris'>{itemDetail.categoria} / stock:{itemDetail.stock}  </h4>  
-          </div>
-          <div className='mt-3' dangerouslySetInnerHTML={{ __html: itemDetail.descripcion }} />
-          <Anteojo medidas={itemDetail.medidas}></Anteojo> 
-            
-          <div className='mt-3'>   
+            <div className='' dangerouslySetInnerHTML={{ __html: itemDetail.descripcion }} />
           
+          </div>
+          <div className='mt-3 mb-3'>
+          <Anteojo medidas={itemDetail.medidas}></Anteojo> 
+          </div>       
+          <div className='mt-3'>   
           
           <h4 ><i className="bi bi-credit-card-2-back me-2"></i>Todos los medios de pago </h4>
 

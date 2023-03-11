@@ -7,11 +7,11 @@ import {
   deleteObject,
 } from "firebase/storage";
 
-function ImageUpload({ subirImagenes, updateFile }) {
+function ImageUpload({ subirImagenes, updateFile, size = 900 }) {
   const [fileName, setFileName] = useState(updateFile ? updateFile.name : "");
   const [url, setUrl] = useState(updateFile ? updateFile.url : "");
   const [isLoading, setIsLoading] = useState(false);
-
+  
   const handleFile = useCallback((event) => handleUpload(event.target.files[0]), [subirImagenes, fileName]);
 
   const handleUpload = async (file) => {
@@ -26,7 +26,7 @@ function ImageUpload({ subirImagenes, updateFile }) {
       img.src = event.target.result;
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 900;
+        const MAX_WIDTH = size;
         const scaleSize = MAX_WIDTH / img.width;
         canvas.width = MAX_WIDTH;
         canvas.height = img.height * scaleSize;

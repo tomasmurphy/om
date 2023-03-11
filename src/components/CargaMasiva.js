@@ -9,7 +9,9 @@ export const MyComponent = () => {
         const ref = collection(dataBase, "items");
         items.map((prod) => {
           addDoc(ref, prod);
+          return null
         });
+        alert("termine")
       }
     
   return (

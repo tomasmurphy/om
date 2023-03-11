@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { dataBase } from '../firebaseConfig';
-import { getDoc, doc, collection } from 'firebase/firestore';
 import { ItemDetail } from './ItemDetail';
 import Loader from './Loader';
-
+import { CartContext } from '../context/CartContext';
 
 const ItemDetailContent = (props) => {
     window.scrollTo(0, 0)
@@ -13,22 +11,20 @@ const ItemDetailContent = (props) => {
     const onHandleCartModal = () => {
       handleCartModal();
     };
+
     const [itemDetail, setItem] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const { idProducto } = useParams()
-    
+
+    const { idProducto } = useParams();
+
+    // Obtiene el valor del arreglo items desde el contexto CartContext
+    const { items } = useContext(CartContext);
+
     useEffect(() => {
-        const itemsCollection = collection(dataBase, 'items');
-        const ref = doc(itemsCollection, idProducto);
-        getDoc(ref)
-            .then((res) => {
-                setItem({
-                    id: res.id,
-                    ...res.data()
-                });
-                setIsLoading(false)
-            });
-    }, [idProducto]);
+        const foundItem = items.find(item => item.id === idProducto); // Busca el item correspondiente en el arreglo
+        setItem(foundItem);
+        setIsLoading(false);
+    }, [idProducto, items]);
 
     return (
         <>

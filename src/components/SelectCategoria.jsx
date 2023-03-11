@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Form } from "react-bootstrap";
-import { getItems } from "./ApiCrud";
+import { getItems } from "./apiCrudRealTime";
 
 const SelectCategoria = ({ categoria, cargarCategoria }) => {
   const [categorias, setCategorias] = useState([]);

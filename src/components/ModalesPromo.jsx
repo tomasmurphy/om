@@ -50,9 +50,9 @@ const ModalesPromo = (props) => {
         </div>   :""}
 
 {(props.tituloPromo=== "Asesoramiento personalizado") ?
-<div className="d-flex align-items-center flex-column">
+<div className="d-flex align-items-start flex-column">
             <p>Escibinos tu consulta y te asesoramos al instante </p>
-            <div className='boton me-md-2 btnWhat' onClick={() => {
+            <div className='boton  btnWhat' onClick={() => {
    enviarWhat();
     
   }}>Consultar <i className="bi bi-whatsapp"></i></div>

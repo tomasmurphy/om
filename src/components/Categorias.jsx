@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { getItems, updateItem, createItem, deleteItem } from "./ApiCrud";
+import { getItems, updateItem, createItem, deleteItem } from "./apiCrudRealTime";
 import Swal from "sweetalert2";
+import ImgBanner from './ImgBanner'
 
 const Categorias = () => {
   const [show, setShow] = useState(false);
@@ -13,8 +14,9 @@ const Categorias = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cat = await getItems();
-      setCategorias(cat);
+      const items = await getItems();
+      const categorias = items.filter(item => item.hasOwnProperty("categoria"));
+      setCategorias(categorias);
     };
     fetchData();
   }, []);
@@ -140,7 +142,8 @@ const Categorias = () => {
           }} className=" bi bi-check-square-fill"></i>
 </div>
 </div>
-
+                <ImgBanner nombre="desktop"/>
+                <ImgBanner nombre="mobile"/>
           </div>
         </Modal.Body>
       </Modal>

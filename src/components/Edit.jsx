@@ -3,17 +3,16 @@ import { getDoc, updateDoc, doc } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Modal from "react-bootstrap/Modal";
 import ImagenUpload from "./ImageUpload";
-import { Editor } from "./MostrarImagen";
 import SelectCategoria from "./SelectCategoria";
-import StockControl from "./StockControl";
 
-const Edit = ({ id, getProducts, stockUpdate }) => {
+const Edit = ({ id  }) => {
   const [categoria, setCategoria] = useState("");
   const [titulo, setTitulo] = useState("");
   const [proveedor, setProveedor] = useState("");
-  const [medidas, setMedidas] = useState([]);
+  const [medidas, setMedidas] = useState({ ancho: "", alto: "", patilla: "" });
   const [imagenes, setImagenes] = useState([]);
   const [descripcion, setDescripcion] = useState("");
+  const [stock, setStock] = useState(0);
 
   const subirImagenes = (img, borrar) => {
     if (borrar === 1) {
@@ -34,9 +33,10 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
       proveedor: proveedor,
       medidas: medidas,
       imagenes: imagenes,
+      stock: stock,
     };
     await updateDoc(product, data);
-    getProducts();
+    
   };
 
   const getProductById = async (id) => {
@@ -49,6 +49,7 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
       setImagenes(product.data().imagenes);
       setProveedor(product.data().proveedor);
       setMedidas(product.data().medidas);
+      setStock(product.data().stock);
     } else {
       console.log("El producto no existe");
     }
@@ -57,18 +58,10 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
   useEffect(() => {
     getProductById(id);
     // eslint-disable-next-line
-  }, [stockUpdate]);
+  }, []);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const cargarDescripcion = (descripcion) => {
-    setDescripcion(descripcion);
-  };
-  const handleDescripcionChange = (value) => {
-    setDescripcion(value);
-    cargarDescripcion(value);
-  };
 
   const cargarCategoria = (categoria) => {
     setCategoria(categoria);
@@ -97,7 +90,6 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
           <div className="container">
             <div className="row">
               <div className="col">
-                {/* <StockControl/> */}
                 <div className="mb-3 row cajaUpload">
                   <div className="col-4 text-center ">
                     {imagenes[0] === undefined ? (
@@ -140,15 +132,15 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
                   </div>
                 </div>
                 <form onSubmit={update} className="row">
-                  <div className="mb-3 col-12">
-                    <label className="form-label">Categoria</label>
+                  <div className="mb-3 col-12 d-flex">
+                    <label className="form-label col-4">Categoria</label>
                     <SelectCategoria
                       categoria={categoria}
                       cargarCategoria={handleCategoriaChange}
                     />
                   </div>
-                  <div className="mb-3 col-12">
-                    <label className="form-label">Titulo</label>
+                  <div className="mb-3 col-12 d-flex">
+                    <label className="form-label col-4">Titulo</label>
                     <input
                       value={titulo}
                       onChange={(e) => setTitulo(e.target.value)}
@@ -156,15 +148,17 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3 col-12">
-                    <label className="form-label">Descripcion</label>
-                    <Editor
-                      descripcion={descripcion}
-                      cargarDescripcion={handleDescripcionChange}
-                    ></Editor>
+                  <div className="mb-3 col-12 d-flex">
+                    <label className="form-label col-4">Descripcion</label>
+                    <input
+                      value={descripcion}
+                      onChange={(e) => setDescripcion(e.target.value)}
+                      type="text"
+                      className="form-control"
+                    />
                   </div>
-                  <div className="mb-3 col-12">
-                    <label className="form-label">Proveedor</label>
+                  <div className="mb-3 col-12 d-flex">
+                    <label className="form-label col-4">Proveedor</label>
                     <input
                       value={proveedor}
                       onChange={(e) => setProveedor(e.target.value)}
@@ -172,42 +166,66 @@ const Edit = ({ id, getProducts, stockUpdate }) => {
                       className="form-control"
                     />
                   </div>
-
-                  <div className="mb-3 col-4">
+                  <div className="mb-3 col-12 col-md-4 text-center">
+                    <label className="form-label">Stock</label>
+                    <div className="input-group">
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={() => setStock(stock - 1)}
+                      >
+                        -
+                      </button>
+                      <input
+                        value={stock}
+                        onChange={(e) => setStock(e.target.value)}
+                        type="number"
+                        className="form-control text-center"
+                      />
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={() => setStock(stock + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div className="col-0 col-md-2"></div>
+                  <div className="mb-3 col-4 col-md-2 text-center">
                     <label className="form-label">Ancho</label>
                     <input
-                      value={medidas[0]?.ancho || ""}
+                      value={medidas.ancho}
                       onChange={(e) =>
-                        setMedidas([{ ...medidas[0], ancho: e.target.value }])
+                        setMedidas({ ...medidas, ancho: e.target.value })
                       }
                       type="number"
-                      className="form-control"
+                      className="form-control text-center"
                     />
                   </div>
-                  <div className="mb-3 col-4">
+                  <div className="mb-3 col-4 col-md-2 text-center">
                     <label className="form-label">Alto</label>
                     <input
-                      value={medidas[0]?.alto || ""}
+                      value={medidas.alto}
                       onChange={(e) =>
-                        setMedidas([{ ...medidas[0], alto: e.target.value }])
+                        setMedidas({ ...medidas, alto: e.target.value })
                       }
                       type="number"
-                      className="form-control"
+                      className="form-control text-center"
+                    />
+                  </div>
+                  <div className="mb-3 col-4 col-md-2 text-center">
+                    <label className="form-label">Patilla</label>
+                    <input
+                      value={medidas.patilla}
+                      onChange={(e) =>
+                        setMedidas({ ...medidas, patilla: e.target.value })
+                      }
+                      type="number"
+                      className="form-control text-center"
                     />
                   </div>
 
-                  <div className="mb-3 col-4">
-                    <label className="form-label">Patilla</label>
-                    <input
-                      value={medidas[0]?.patilla || ""}
-                      onChange={(e) =>
-                        setMedidas([{ ...medidas[0], patilla: e.target.value }])
-                      }
-                      type="number"
-                      className="form-control"
-                    />
-                  </div>
-                  
                   <button
                     type="submit"
                     onClick={handleClose}

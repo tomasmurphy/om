@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth'
 import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
+import { getPerformance } from "firebase/performance";
 
 const firebaseConfig = {
     apiKey: process.env.react_app_api_Key,
@@ -16,6 +18,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
 const dataBase = getFirestore(app)
+const dataBaseRealTime = getDatabase(app)
+
+// eslint-disable-next-line
+const perf = getPerformance(app);
+
+
 const storage = getStorage(app)
 
-export {auth,  dataBase, storage}
+export {auth,  dataBase, storage, dataBaseRealTime}

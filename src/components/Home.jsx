@@ -1,48 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
-import { collection, getDocs } from "firebase/firestore";
-import { dataBase } from "../firebaseConfig";
-import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Seo from "./Head";
-import desktop from '../img/bannerdesktop.jpg'
-import mobile from '../img/bannermobile.jpg'
+import { getItems } from "./apiCrudRealTime";
 
 const Home = () => {
   window.scrollTo(0, 0);
-  const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { nombreCategoria } = useParams();
-  const [img1, setImg1] = useState();
-  const [img2, setImg2] = useState();
+  const [desktop, setDesktop] = useState();
+  const [mobile, setMobile] = useState();
   
   const onLoad = () => {
     setIsLoading(false);
   };
-
   useEffect(() => {
-    const q = collection(dataBase, "items");
-
-    getDocs(q)
-      .then((res) => {
-        const productos = res.docs.map((prod) => {
-          return {
-            id: prod.id,
-            ...prod.data(),
-          };
-        });
-        const productosOrdenados = productos.filter(product => product.categoria === "Promo")
-        setItems(productosOrdenados);
-        setImg1(productosOrdenados[0].imagenes[0].url)
-        setImg2(productosOrdenados[0].imagenes[1].url)
+    getItems()
+      .then((categorias) => {
+        const desktop = categorias.filter(item => item.nombre === "desktop");
+        const mobile = categorias.filter(item => item.nombre === "mobile");
+        setDesktop(desktop[0].datos.url);
+        setMobile(mobile[0].datos.url);
+        setIsLoading(false)
       })
       .catch((error) => {
         console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
-  }, [nombreCategoria]);
+  }, []);
+
+  
 
 const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -95,7 +80,7 @@ style={{
   <div className='bordeGrisDer col-1'></div>
   </div>
   {/* <h1 className="textoBajo text-center"> {items[0].titulo} </h1> */}
-  <Link to={`/categoria`}><h1 className="textoBajo text-center boton"> Ver todos los modelos! </h1></Link>
+  <Link to={`categoria/todos`}><h1 className="textoBajo text-center boton"> Ver todos los modelos! </h1></Link>
   
 </div>
 </div>

@@ -42,7 +42,7 @@ const Cart = (props) => {
                             ))}
                         </div>
                         <div className="botonera mt-4">
-                            <Link to="/categoria" onClick={props.handleModal} className="boton">
+                            <Link to="/categoria/todos" onClick={props.handleModal} className="boton">
                                 {(cart.length === 0) ? "Agregar productos" : "Agregar mas productos"}
                             </Link>
                             <Form cart={cart}

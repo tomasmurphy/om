@@ -10,6 +10,7 @@ import Nav from './Nav';
 import BannerPromo from './BannerPromo';
 import { useLocation } from 'react-router-dom';
 import Cart from './Cart';
+import { CartProvider } from '../context/CartContext';
 
 const Main = () => {
     const location = useLocation().pathname
@@ -22,27 +23,24 @@ const Main = () => {
     return (
         <>
             {(location !== "/admin") ?
-                <>
+                <>  <CartProvider>
                     <Nav handleCartModal={handleCartModal} />
                     <NavMenu></NavMenu>
                     <Cart show={showCart} handleModal={handleCartModal}></Cart>
                     <div className="container-fluid sinBorde">
                         <Routes >
                             <Route path='/' element={<Home />} />
-                            <Route path='/categoria/' element={<ItemListContainer />} />
-                            <Route path='/categoria/:nombreCategoria' element={<ItemListContainer />} />
+                            <Route  path='/categoria/:nombreCategoria' element={<ItemListContainer />} />
                             <Route path='/detalle/:idProducto' element={<ItemDetailContent handleCartModal={handleCartModal} />} />
                             <Route path='/admin' element={<Show />} />
                         </Routes>
                     </div>
                     <BannerPromo handleCartModal={handleCartModal} />
+                    </CartProvider>
                 </>
                 : <div className="container-fluid sinBorde">
                     <Routes >
                         <Route path='/' element={<Home />} />
-                        <Route path='/categoria/' element={<ItemListContainer />} />
-                        <Route path='/categoria/:nombreCategoria' element={<ItemListContainer />} />
-                        <Route path='/detalle/:idProducto' element={<ItemDetailContent />} />
                         <Route path='/admin' element={<Show />} />
                     </Routes>
                 </div>}
