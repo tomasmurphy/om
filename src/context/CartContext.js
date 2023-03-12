@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, where, query } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Loader from "../components/Loader";
 
@@ -78,18 +78,16 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const loadProducts = async () => {
       const itemsCollection = collection(dataBase, "items");
-      const querySnapshot = await getDocs(itemsCollection);
+      const queryRef = query(itemsCollection, where("imagenes", ">", []));
+      const querySnapshot = await getDocs(queryRef);
       const productos = querySnapshot.docs.map((doc) => {
         console.log("gaste una lectura desde el front");
         return { id: doc.id, ...doc.data() };
       });
       const productosFiltrados = productos.filter(
-        (p) => p.stock > 0 && p.imagenes.length > 0
+        (p) => p.stock > 0 
       );
-      const productosOrdenados = [...productosFiltrados].sort(
-        (a, b) => (a.precio > b.precio ? 1 : a.precio < b.precio ? -1 : 0)
-      );
-      setItems(productosOrdenados);
+            setItems(productosFiltrados);
       setIsLoading(false);
     };
 
@@ -114,12 +112,12 @@ export const CartProvider = ({ children }) => {
         <div className="loader-container">
           <div className="loader">
             <h3 className='text-center mt-5'>Cargando el catálogo</h3>
-          <Loader />
+            <Loader />
           </div>
         </div>
       ) : (
         children
       )}
     </CartContext.Provider>
-      );
-    };
+  );
+};

@@ -50,10 +50,19 @@ const Show = () => {
 
   useEffect(() => {
     const productosFiltrados = products.filter((producto) => {
-      return producto.titulo.toLowerCase().includes(searchTerm.toLowerCase());
+      const titulo = producto.titulo.toLowerCase();
+      const descripcion = producto.descripcion.toLowerCase();
+      const proveedor = producto.proveedor.toLowerCase();
+      const categoria = producto.categoria.toLowerCase();
+      const searchTermLower = searchTerm.toLowerCase();
+      return titulo.includes(searchTermLower) ||
+             descripcion.includes(searchTermLower) ||
+             proveedor.includes(searchTermLower) ||
+             categoria.includes(searchTermLower);
     });
     setFilteredProducts(productosFiltrados);
   }, [products, searchTerm]);
+
 
   const deleteProduct = async (id) => {
     const productDoc = doc(dataBase, "items", id);
@@ -123,23 +132,23 @@ const Show = () => {
                 <div className="col-2 mx-0 px0">Categoría</div>
                 <div className="col-6 col-md-2 mx-0 px0">Título</div>
                 <div className="col-2 mx-0 px0">Proveedor</div>
-                <div className="col-2 mx-0 px0">Descripción</div>
-                <div className="col-2 mx-0 px0">Stock</div>
+                <div className="col-3 mx-0 px0">Descripción</div>
+                <div className="col-1 mx-0 px0">Stock</div>
                 <div className="col-2 mx-0 px0">Editar/Borrar</div>
               </div>
               {filteredProducts.map((product) => (
-                <div className="row cuadro" key={product.id}>
+                <div className={`row cuadro ${product.stock === 0 ? "noStock" : ""} ${product.imagenes.length === 0 ? "noStock" : ""}`} key={product.id}>
                   <div className="col-2 mx-0 px0">{product.categoria}</div>
                   <div className="col-6 col-md-2 mx-0 px0">
                     {product.titulo}
                   </div>
                   <div className="col-2  mx-0 px0">{product.proveedor}</div>
                   <div
-                    className="col-2 descripcion"
+                    className="col-3 descripcion"
                     dangerouslySetInnerHTML={{ __html: product.descripcion }}
                   />
 
-                  <div className="col-2  mx-0 px0">{product.stock}</div>
+                  <div className="col-1  mx-0 px0">{product.stock}</div>
                   <div className="d-flex col-2 mx-0 px0">
                     <Edit id={product.id}></Edit>
                     <div>
