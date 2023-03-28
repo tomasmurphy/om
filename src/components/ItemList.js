@@ -13,10 +13,8 @@ export const ItemList = ({ items }) => {
                   id={item.id}
                   imagenes={item.imagenes}
                   titulo={item.titulo}
-                  stock={item.stock}
-                  precio={item.precio}
-                  formaPago={item.formaPago}
-                  categoria={item.categoria} />
+                  medidas={item.medidas}
+                  />
                   </div>
             )
          }

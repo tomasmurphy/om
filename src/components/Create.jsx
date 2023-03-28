@@ -37,7 +37,8 @@ const Create = () => {
       stock: stock,
       imagenes: imagenes,
       medidas:medidas,
-      proveedor:proveedor
+      proveedor:proveedor,
+      estado: imagenes.length === 0 || stock === 0 ? "pausado" : "activo" 
     });
     setCategoria("");
     setDescripcion("");
@@ -91,11 +92,11 @@ const Create = () => {
                       subirImagenes={subirImagenes}
                     ></ImagenUpload>
                   </div>
-                  <div className="col-4 text-center">
+                  {/* <div className="col-4 text-center">
                     <ImagenUpload
                       subirImagenes={subirImagenes}
                     ></ImagenUpload>
-                  </div>{" "}
+                  </div>{" "} */}
                 </div>
                 <form onSubmit={store} className="row">
                   <div className="d-flex mb-3 col-12">

@@ -34,6 +34,7 @@ const Edit = ({ id  }) => {
       medidas: medidas,
       imagenes: imagenes,
       stock: stock,
+      estado: imagenes.length === 0 || stock === 0 ? "pausado" : "activo"
     };
     await updateDoc(product, data);
     
@@ -117,7 +118,7 @@ const Edit = ({ id  }) => {
                       ></ImagenUpload>
                     )}
                   </div>
-                  <div className="col-4 text-center ">
+                  {/* <div className="col-4 text-center ">
                     {imagenes[2] === undefined ? (
                       <ImagenUpload
                         updateFile={{ name: "", url: "" }}
@@ -129,7 +130,7 @@ const Edit = ({ id  }) => {
                         subirImagenes={subirImagenes}
                       ></ImagenUpload>
                     )}
-                  </div>
+                  </div> */}
                 </div>
                 <form onSubmit={update} className="row">
                   <div className="mb-3 col-12 d-flex">

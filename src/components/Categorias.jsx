@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { getItems, updateItem, createItem, deleteItem } from "./apiCrudRealTime";
 import Swal from "sweetalert2";
-import ImgBanner from './ImgBanner'
 
 const Categorias = () => {
   const [show, setShow] = useState(false);
@@ -93,6 +92,7 @@ const Categorias = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="container-fluid">
+          
             {categorias.map((cat) => (
               <div className="d-flex" key={cat.id}>
                 <input
@@ -142,8 +142,7 @@ const Categorias = () => {
           }} className=" bi bi-check-square-fill"></i>
 </div>
 </div>
-                <ImgBanner nombre="desktop"/>
-                <ImgBanner nombre="mobile"/>
+                
           </div>
         </Modal.Body>
       </Modal>

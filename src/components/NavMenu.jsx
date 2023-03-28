@@ -1,7 +1,5 @@
 import { NavLink, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { dataBase } from "../firebaseConfig";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useLocation } from "react-router-dom";
 import { getItems } from "./apiCrudRealTime";

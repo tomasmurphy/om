@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import { collection, getDocs, where, query, orderBy } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Loader from "../components/Loader";
 
@@ -78,21 +78,23 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const loadProducts = async () => {
       const itemsCollection = collection(dataBase, "items");
-      const queryRef = query(itemsCollection, where("imagenes", ">", []));
+      const queryRef = query(
+        itemsCollection,
+        where("estado", "==", "activo"),
+        orderBy("medidas.ancho")
+      );
       const querySnapshot = await getDocs(queryRef);
       const productos = querySnapshot.docs.map((doc) => {
         console.log("gaste una lectura desde el front");
         return { id: doc.id, ...doc.data() };
       });
-      const productosFiltrados = productos.filter(
-        (p) => p.stock > 0 
-      );
-            setItems(productosFiltrados);
+      setItems(productos);
       setIsLoading(false);
     };
-
+  
     loadProducts();
   }, []);
+  
 
   return (
     <CartContext.Provider
@@ -121,3 +123,4 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+

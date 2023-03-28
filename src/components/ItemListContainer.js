@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { ItemList } from './ItemList';
-import Loader from './Loader';
-import { collection, getDocs } from 'firebase/firestore';
-import { dataBase } from '../firebaseConfig';
 import Seo from './Head';
 import { CartContext } from '../context/CartContext';
 
 const ItemListContainer = () => {
     window.scrollTo(0, 0)
-    const [isLoading, setIsLoading] = useState(false);
     const { nombreCategoria } = useParams()
     const cartContext = useContext(CartContext);
     const {items} = cartContext
@@ -47,9 +43,9 @@ const ItemListContainer = () => {
                 image={`${window.location.origin}%PUBLIC_URL%/logoVioleta.jpg`}
                 pathSlug={window.location.href}
             />
-            {isLoading ? (<Loader />) : (<div className='item row'>
+            <div className='item row'>
                 <ItemList items={productosCategoria} />
-            </div>)}
+            </div>
         </>
     );
 };

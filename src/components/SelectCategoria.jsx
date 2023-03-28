@@ -7,14 +7,16 @@ const SelectCategoria = ({ categoria, cargarCategoria }) => {
   const [value, setValue] = useState(categoria);
 
   const cargarCategoriaMemoized = useCallback(cargarCategoria, [cargarCategoria]);
-
+ 
   useEffect(() => {
-    async function fetchData() {
-      const cat = await getItems();
-      setCategorias(cat);
-    }
+    const fetchData = async () => {
+      const items = await getItems();
+      const categorias = items.filter(item => item.hasOwnProperty("categoria"));
+      setCategorias(categorias);
+    };
     fetchData();
   }, []);
+
 
   useEffect(() => {
     cargarCategoriaMemoized(value);
