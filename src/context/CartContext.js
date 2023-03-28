@@ -81,7 +81,7 @@ export const CartProvider = ({ children }) => {
       const queryRef = query(
         itemsCollection,
         where("estado", "==", "activo"),
-        orderBy("medidas.ancho")
+        orderBy("titulo")
       );
       const querySnapshot = await getDocs(queryRef);
       const productos = querySnapshot.docs.map((doc) => {
