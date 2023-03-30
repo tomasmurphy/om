@@ -25,37 +25,62 @@ const Show = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showPaused, setShowPaused] = useState(false);
   const [pausedLoaded, setPausedLoaded] = useState(false);
-  const activeProductsCollection = query(
-    collection(dataBase, "items"),
-    where("estado", "==", "activo")
-  );
-  // const pausedProductsCollection = query(collection(dataBase, "items"), where("estado", "==", "pausado"));
-
+  
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(activeProductsCollection, (snapshot) => {
-      const productos = snapshot.docs.map((doc) => {
+    const activeProductsCollection = query(
+      collection(dataBase, "items"),
+      where("estado", "==", "activo")
+    );
+  
+    const pausedProductsCollection = query(
+      collection(dataBase, "items"),
+      where("estado", "==", "pausado")
+    );
+  
+    const unsubscribeActive = onSnapshot(activeProductsCollection, (snapshot) => {
+      const activeProductos = snapshot.docs.map((doc) => {
         console.log("leo desde admin");
         return {
           ...doc.data(),
           id: doc.id,
         };
       });
-      const productosOrdenados = productos.sort((a, b) => {
+      const activeProductosOrdenados = activeProductos.sort((a, b) => {
         if (a.categoria === b.categoria) {
           return a.titulo.localeCompare(b.titulo);
         }
         return a.categoria.localeCompare(b.categoria);
       });
-      setProducts(productosOrdenados);
+      setProducts(activeProductosOrdenados);
     });
-
-    return () => unsubscribe();
-    // eslint-disable-next-line
+  
+    const unsubscribePaused = onSnapshot(pausedProductsCollection, (snapshot) => {
+      const pausedProductos = snapshot.docs.map((doc) => {
+        console.log("leo desde admin");
+        return {
+          ...doc.data(),
+          id: doc.id,
+        };
+      });
+      const pausedProductosOrdenados = pausedProductos.sort((a, b) => {
+        if (a.categoria === b.categoria) {
+          return a.titulo.localeCompare(b.titulo);
+        }
+        return a.categoria.localeCompare(b.categoria);
+      });
+      setPausedProducts(pausedProductosOrdenados);
+    });
+  
+    return () => {
+      unsubscribeActive();
+      unsubscribePaused();
+    };
   }, []);
+  
 
   useEffect(() => {
     if (!pausedLoaded && showPaused) {
