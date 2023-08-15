@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Loader from "./Loader";
 import { Link } from "react-router-dom";
 import Seo from "./Head";
 import { getItems } from "./apiCrudRealTime";
+import { CartContext } from '../context/CartContext';
 
 const Home = () => {
   window.scrollTo(0, 0);
@@ -13,6 +14,7 @@ const Home = () => {
   const onLoad = () => {
     setIsLoading(false);
   };
+  
   useEffect(() => {
     getItems()
       .then((categorias) => {
@@ -27,24 +29,48 @@ const Home = () => {
       });
   }, []);
 
-  
+  const [categories, setCategories] = useState([]);
+    
+  useEffect(() => {
+    getItems().then((categorias) => {
+      const filtro = categorias.filter(item => item.hasOwnProperty("categoria"));
+      setCategories(filtro);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, []);
 
-const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const cartContext = useContext(CartContext);
+  const { items } = cartContext;
 
-useEffect(() => {
-  function handleResize() {
-    setWindowWidth(window.innerWidth);
-  }
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  window.addEventListener("resize", handleResize);
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
 
-  return () => {
-    window.removeEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const img = windowWidth > 700 ? desktop : mobile;
+  const widthBanner = windowWidth > 700 ? windowWidth / 3 : windowWidth;
+
+  const handleScrollToLinks = (event) => {
+    event.preventDefault();
+    const linksSection = document.getElementById("links");
+    const offset = 64; // Ajusta el valor del offset según tus necesidades
+    const offsetTop = linksSection.offsetTop - offset;
+
+    window.scrollTo({
+      top: offsetTop,
+      behavior: "smooth",
+    });
   };
-}, []);
-// const img = (windowWidth > 700)?img1:img2
-const img = (windowWidth > 700)?desktop:mobile
-const widthBanner = (windowWidth > 700)?windowWidth/3:windowWidth
 
   return (
     <>
@@ -56,35 +82,52 @@ const widthBanner = (windowWidth > 700)?windowWidth/3:windowWidth
       />
       {isLoading ? (
         <Loader />
-      ) 
-      : 
-<div className="promoHomeWrapper sinBorde">
-<div  
-style={{
-        backgroundImage: `url('${img}')`,
-        backgroundSize: "100% auto",
-        backgroundPosition: "center center",
-        backgroundRepeat: "no-repeat",
-        height: `${widthBanner}px`
-      }} 
-      onLoad={onLoad}
-      className="row promoHome sinBorde mb-5">
-  <div className="col-1" >  
-  <div className='bordeIzquierdo'> </div>  
-  </div>
-  <div className="col-1">  
-  <div className='bordeGrisIzq col-1'></div>
-  </div>
-    
-    <div className="col-1">  
-  <div className='bordeGrisDer col-1'></div>
-  </div>
-  {/* <h1 className="textoBajo text-center"> {items[0].titulo} </h1> */}
-  <Link to={`categoria/todos`}><h1 className="textoBajo text-center boton"> Ver todos los modelos! </h1></Link>
-  
-</div>
-</div>
-      }
+      ) : (
+        <div className="promoHomeWrapper sinBorde">
+          <div
+            style={{
+              backgroundImage: `url('${img}')`,
+              backgroundSize: "100% auto",
+              backgroundPosition: "center center",
+              backgroundRepeat: "no-repeat",
+              height: `${widthBanner}px`
+            }}
+            onLoad={onLoad}
+            className="row promoHome bordeBot sinBorde"
+          >
+            <div className="col-1">
+              <div className="bordeIzquierdo"> </div>
+            </div>
+            <div className="col-1">
+              <div className="bordeGrisIzq col-1"></div>
+            </div>
+
+            <div className="col-1">
+              <div className="bordeGrisDer col-1"></div>
+            </div>
+            <a href="#links" onClick={handleScrollToLinks}>
+              <h1 className="textoBajo2 text-center"> ↧ </h1>
+            </a>
+          </div>
+        </div>
+      )}
+      <div id="links" className="row">
+        {categories.map((cat) => (
+          <div key={cat.id} className="col-6 col-md-4">
+            <Link to={`/categoria/${cat.categoria}`} className="  row promoHome">
+              <div className="sombraCat">
+                <img
+                  onLoad={onLoad}
+                  src={items.find(item => item.categoria === cat.categoria).imagenes[0].url}
+                  alt="promo"
+                  className="col-12 img-fluid  fondoGris"
+                />
+                <h1 className="textoBajo text-center"> {cat.categoria} </h1>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

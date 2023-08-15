@@ -2,6 +2,7 @@
   height: auto;
   width: 100%;
   margin-top: 2rem;
+
   .row {
     align-items: center;
     text-align: center;
@@ -26,18 +27,40 @@
 .sinBorde {
   --bs-gutter-x: 0rem;
 }
- 
+ .bordeBot{
+  border-bottom: 2rem solid rgb(193, 53, 132, .8);
+}
 .promoHome {
   // margin-left: -0.67rem;
   height: auto;
   // width: calc(100% + 1.35rem);
   position: relative;
-  border-bottom: 2rem solid rgb(193, 53, 132, .8);
+  // border-bottom: 2rem solid rgb(193, 53, 132, .8);
   // &:hover {
   //   cursor: pointer;
   //   opacity: 0.7;
   // }
-
+  .sombraCat {
+    margin-bottom: .1rem;
+    background-color: rgb(255, 255, 255, 1); 
+    // border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
+    transition: transform 0.3s ease; 
+    &:hover {
+      box-shadow: 0px 4px 8px rgba(193, 53, 132, 1); 
+     filter: grayscale(50%);
+filter: contrast(100%);
+    }
+    @include desktop{
+      margin-bottom: .2rem;
+    }
+  
+  }  
+  .fondoGris{
+    filter: contrast(50%);
+    filter: grayscale(100%);
+  }
+  
   .bordeIzquierdo {
     position: absolute;
     padding-top: 0.5rem;
@@ -80,26 +103,63 @@
   .textoBajo {
     position: absolute;
     width: fit-content;
-    top: 65%;
-    left: 0;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: rgb(193, 53, 132, .8);
     color: white;
     padding-right: 1rem;
     padding-left: 1rem;
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
-    border-bottom-right-radius: 5rem;
-    border-top-right-radius: 5rem;
+    border-radius: .3rem;
+    // border-top-right-radius: 5rem;
     text-transform: uppercase;
     font-size: 0.8rem;
     font-weight: 300;
     max-width: 90%;
+    box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
+    transition: transform 0.3s ease; 
+
     @include desktop {
       padding-top: 1rem;
       padding-bottom: 1rem;
-      top: 52%;
-      left: 3rem;
+      top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
     }
+  }
+  .textoBajo2 {
+    position: absolute;
+    width: fit-content;
+    bottom: -2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    // background-color: rgb(193, 53, 132, .8);
+    color: white;
+    height: 2rem;
+    // padding-right: 1rem;
+    // padding-left: 1rem;
+    // padding-top: 0.3rem;
+    // padding-bottom: 0.3rem;
+    border-radius: .3rem;
+    // border-top-right-radius: 5rem;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 300;
+    // max-width: 90%;
+    // box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
+    transition: transform 0.3s ease; 
+
+    @include desktop {
+      // padding-top: 1rem;
+      // padding-bottom: 1rem;
+      bottom: -2.5rem;
+
+    left: 50%;
+    transform: translateX(-50%);
+    }
+    
   }
   .btnAcc {
     position: absolute;
