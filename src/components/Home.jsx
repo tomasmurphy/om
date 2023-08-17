@@ -58,12 +58,12 @@ const Home = () => {
   }, []);
 
   const img = windowWidth > 700 ? desktop : mobile;
-  const widthBanner = windowWidth > 700 ? windowWidth / 3 : windowWidth;
+  // const widthBanner = windowWidth > 700 ? windowWidth / 3 : windowWidth;
 
   const handleScrollToLinks = (event) => {
     event.preventDefault();
     const linksSection = document.getElementById("links");
-    const offset = 64; // Ajusta el valor del offset según tus necesidades
+    const offset = 64;
     const offsetTop = linksSection.offsetTop - offset;
 
     window.scrollTo({
@@ -84,27 +84,13 @@ const Home = () => {
         <Loader />
       ) : (
         <div className="promoHomeWrapper sinBorde">
+          <img src={img} className="img-fluid" alt="banner" />
           <div
-            style={{
-              backgroundImage: `url('${img}')`,
-              backgroundSize: "100% auto",
-              backgroundPosition: "center center",
-              backgroundRepeat: "no-repeat",
-              height: `${widthBanner}px`
-            }}
+            
             onLoad={onLoad}
             className="row promoHome bordeBot sinBorde"
           >
-            <div className="col-1">
-              <div className="bordeIzquierdo"> </div>
-            </div>
-            <div className="col-1">
-              <div className="bordeGrisIzq col-1"></div>
-            </div>
-
-            <div className="col-1">
-              <div className="bordeGrisDer col-1"></div>
-            </div>
+            
             <a href="#links" onClick={handleScrollToLinks}>
               <h1 className="textoBajo2 text-center"> ↧ </h1>
             </a>

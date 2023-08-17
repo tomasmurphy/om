@@ -132,7 +132,7 @@ filter: contrast(100%);
   .textoBajo2 {
     position: absolute;
     width: fit-content;
-    bottom: -2.5rem;
+    bottom: -2.6rem;
     left: 50%;
     transform: translateX(-50%);
     // background-color: rgb(193, 53, 132, .8);
@@ -154,7 +154,7 @@ filter: contrast(100%);
     @include desktop {
       // padding-top: 1rem;
       // padding-bottom: 1rem;
-      bottom: -2.5rem;
+      bottom: -2.6rem;
 
     left: 50%;
     transform: translateX(-50%);
