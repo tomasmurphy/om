@@ -6,8 +6,9 @@
     margin-top: 7rem;
     margin-left: auto;
     border-radius: 0;
+    z-index: 10000;
     @include desktop{
-      margin-top: 3.7rem;
+      margin-top: 4rem;
       width: fit-content;
   
     }

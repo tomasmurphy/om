@@ -28,8 +28,8 @@ const Inicio = () => {
         <Modal.Body>
           <div className="container-fluid">
           <div>
-          <ImgBanner nombre="desktop"/>
-                <ImgBanner nombre="mobile"/>
+          <ImgBanner nombre="promo"/>
+                <ImgBanner nombre="otro"/>
                 </div>
                 
           </div>

@@ -30,13 +30,14 @@ const ImgBanner = ({ nombre }) => {
     <>
       <div className="container-fluid">
         <p>{nombre}</p>
-        {imagenes !== undefined && (
-          <ImageUpload
-            updateFile={imagenes[0].datos}
-            subirImagenes={subirImagenes}
-            size={nombre === "desktop" ? 3000 : 900}
-          />
-        )}
+        {imagenes !== undefined && imagenes.length > 0 && (
+  <ImageUpload
+    updateFile={imagenes[0].datos}
+    subirImagenes={subirImagenes}
+    size={900}
+  />
+)}
+
       </div>
     </>
   );

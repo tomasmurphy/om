@@ -9,9 +9,18 @@ const Form = ({ cart, handleModal, clearCart }) => {
         event.preventDefault();
 
         const celu = window.innerWidth < 990 ? "api" : "web";
-        const mensaje = cart.reduce((acc, prod) => `${acc}👓 ${prod.titulo} / `, "");
-        const whatsapp = (cart.length === 0) ? "Hola *Optimarket OK!* 👓" : `Hola *Optimarket OK!*. Me interesan estos marcos ${mensaje}`;
-        const linkCompra = `https://${celu}.whatsapp.com/send?phone=5493774411192&text=${whatsapp}`;
+        
+        // Construye el mensaje dependiendo de la longitud del carrito
+        const mensaje = cart.map(prod => {
+            let messageLine = `👓 ${prod.titulo}`;
+            if (["redondos", "cuadrados", "lectura", "infantiles", "eye cat"].includes(prod.categoria)) {
+                messageLine += " Promo!";
+            }
+            return messageLine;
+        }).join("\n");
+
+        const whatsapp = (cart.length === 0) ? "Hola *Optimarket OK!* 👓" : `Hola *Optimarket OK!*.\n_Me interesan estos marcos:_\n${mensaje}`;
+        const linkCompra = `https://${celu}.whatsapp.com/send?phone=5493774411192&text=${encodeURIComponent(whatsapp)}`;
 
         setIsLoading(true);
 

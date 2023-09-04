@@ -26,6 +26,10 @@
 }
 .sinBorde {
   --bs-gutter-x: 0rem;
+  margin-top: 10.5rem;
+  @include desktop{
+    margin-top: 7.5rem;
+  }
 }
  .bordeBot{
   border-bottom: 2rem solid rgb(193, 53, 132, .8);
@@ -41,20 +45,25 @@
   //   opacity: 0.7;
   // }
   .sombraCat {
-    margin-bottom: .1rem;
-    background-color: rgb(255, 255, 255, 1); 
-    // border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
-    transition: transform 0.3s ease; 
-    &:hover {
-      box-shadow: 0px 4px 8px rgba(193, 53, 132, 1); 
-     filter: grayscale(50%);
-filter: contrast(100%);
+    position: relative ;
+    padding:1rem;
+    border-radius: 1rem;
+    img{// margin-bottom: .1rem;
+      border-radius: 1rem;
+      background-color: rgb(255, 255, 255, 1); 
+      // border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
+      transition: transform 0.3s ease; 
+      &:hover {
+        box-shadow: 0px 4px 8px rgba(193, 53, 132, 1); 
+       filter: grayscale(50%);
+  filter: contrast(100%);
+      }
+      @include desktop{
+        // margin-bottom: .2rem;
+      }
     }
-    @include desktop{
-      margin-bottom: .2rem;
-    }
-  
+    
   }  
   .fondoGris{
     filter: contrast(50%);
@@ -102,31 +111,32 @@ filter: contrast(100%);
   }
   .textoBajo {
     position: absolute;
-    width: fit-content;
-    top: 12%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 1rem;
+    left: 1rem;
+    width: calc(100% - 2rem);
+    // transform: translateX(-50%);
     background-color: rgb(193, 53, 132, .8);
     color: white;
     padding-right: 1rem;
     padding-left: 1rem;
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
-    border-radius: .3rem;
-    // border-top-right-radius: 5rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
     text-transform: uppercase;
     font-size: 0.8rem;
     font-weight: 300;
-    max-width: 90%;
-    box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
+        box-shadow: 0px 4px 8px rgba(193, 53, 132, .5); 
     transition: transform 0.3s ease; 
-
+    
     @include desktop {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      top: 12%;
-    left: 50%;
-    transform: translateX(-50%);
+      
+      
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      // top: 1rem;
+    // left: 50%;
+    // transform: translateX(-50%);
     }
   }
   .textoBajo2 {
@@ -181,4 +191,41 @@ filter: contrast(100%);
 .promoHomeWrapper{
 margin: 0;  
 padding: 0;
+}
+.nuevoHome{
+.promoCartel{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  
+}
+.botones{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // gap: .3rem;
+}
+  .promo{
+  display: flex;
+    background-color: rgba(0, 0, 0, 1);
+align-items: center;
+  // h1, h2, h3{
+  //   color: white;
+  //   text-transform: uppercase;
+  // }
+  // h1{
+  //   text-align: center;
+  //   font-size: 1.2rem;
+  // }
+  // h2{
+  //   text-align: center;
+  //   font-size: 1rem;
+  // }
+  // h3{
+  //   text-align: center;
+  //   font-size: .8rem;
+  //   font-weight: 400;
+  // }
+} 
 }

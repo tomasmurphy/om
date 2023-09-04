@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { getItems, updateItem, createItem, deleteItem } from "./apiCrudRealTime";
+import {
+  getItems,
+  updateItem,
+  createItem,
+  deleteItem,
+} from "./apiCrudRealTime";
 import Swal from "sweetalert2";
 
 const Categorias = () => {
   const [show, setShow] = useState(false);
   const [categorias, setCategorias] = useState([]);
   const [nuevaCategoria, setNuevaCategoria] = useState("");
+  const [updateCounter, setUpdateCounter] = useState(0); // Estado de contador
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -14,11 +20,13 @@ const Categorias = () => {
   useEffect(() => {
     const fetchData = async () => {
       const items = await getItems();
-      const categorias = items.filter(item => item.hasOwnProperty("categoria"));
+      const categorias = items.filter((item) =>
+        item.hasOwnProperty("categoria")
+      );
       setCategorias(categorias);
     };
     fetchData();
-  }, []);
+  }, [updateCounter]); // Dependencia: updateCounter
 
   const handleCategoriaChange = (event, id) => {
     const updatedCategorias = categorias.map((cat) => {
@@ -49,10 +57,12 @@ const Categorias = () => {
         });
         const cat = await getItems();
         setCategorias(cat);
-        setNuevaCategoria("")
+        setNuevaCategoria("");
+        setUpdateCounter((prevCounter) => prevCounter + 1); // Incrementar el contador
       }
     });
   };
+
   const handleDeleteCategoria = async (id) => {
     Swal.fire({
       title: "¿Estás seguro de eliminar la categoría?",
@@ -65,7 +75,8 @@ const Categorias = () => {
         await deleteItem(id);
         const cat = await getItems();
         setCategorias(cat);
-        setNuevaCategoria("")
+        setNuevaCategoria("");
+        setUpdateCounter((prevCounter) => prevCounter + 1); // Incrementar el contador
         Swal.fire({
           title: "Categoría eliminada con éxito",
           icon: "success",
@@ -92,7 +103,6 @@ const Categorias = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="container-fluid">
-          
             {categorias.map((cat) => (
               <div className="d-flex" key={cat.id}>
                 <input
@@ -107,42 +117,45 @@ const Categorias = () => {
                 >
                   <i className="btnCant bi bi-pencil-square"></i>
                 </div>
-                <div className="btnCat" onClick={() => handleDeleteCategoria(cat.id)}><i
-        
-                      className=" btnCant bi bi-trash3"
-                    ></i></div>
-
-                
+                <div
+                  className="btnCat"
+                  onClick={() => handleDeleteCategoria(cat.id)}
+                >
+                  <i className=" btnCant bi bi-trash3"></i>
+                </div>
               </div>
             ))}
             <div className="d-flex">
-            <input
-                  type="text"
-                  className="ps-1"
-                  value={nuevaCategoria}
-                  placeholder="Nueva"
-                  onChange={(event) => setNuevaCategoria(event.target.value)}
-                />
-                <div
-  className="btnCant"
-  onClick={async () => {
-    await createItem({categoria:nuevaCategoria});
-    const cat = await getItems();
-    setCategorias(cat);
-    handleClose();
-    setNuevaCategoria("")
-    Swal.fire({
-      title: "Categoría creada con éxito",
-      icon: "success",
-    });
-  }}
->
-<i style={{
-            color: "green",
-          }} className=" bi bi-check-square-fill"></i>
-</div>
-</div>
-                
+              <input
+                type="text"
+                className="ps-1"
+                value={nuevaCategoria}
+                placeholder="Nueva"
+                onChange={(event) => setNuevaCategoria(event.target.value)}
+              />
+              <div
+                className="btnCant"
+                onClick={async () => {
+                  await createItem({ categoria: nuevaCategoria });
+                  const cat = await getItems();
+                  setCategorias(cat);
+                  handleClose();
+                  setNuevaCategoria("");
+                  Swal.fire({
+                    title: "Categoría creada con éxito",
+                    icon: "success",
+                  });
+                  setUpdateCounter((prevCounter) => prevCounter + 1); // Incrementar el contador
+                }}
+              >
+                <i
+                  style={{
+                    color: "green",
+                  }}
+                  className=" bi bi-check-square-fill"
+                ></i>
+              </div>
+            </div>
           </div>
         </Modal.Body>
       </Modal>

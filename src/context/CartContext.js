@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { collection, getDocs, where, query, orderBy } from "firebase/firestore";
 import { dataBase } from "../firebaseConfig";
 import Loader from "../components/Loader";
-
+import { getItems } from "../components/apiCrudRealTime";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -10,6 +10,46 @@ export const CartProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [promo, setpromo] = useState();
+  const [otro, setotro] = useState();
+  const [categoriesPromo, setCategoriesPromo] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getItems()
+      .then((categorias) => {
+        const promoCategories = categorias.filter(
+          (item) =>
+            item.hasOwnProperty("categoria") &&
+            [
+              "redondos",
+              "cuadrados",
+              "eye cat",
+              "lectura",
+              "infantiles",
+            ].includes(item.categoria)
+        );
+
+        const otherCategories = categorias.filter(
+          (item) =>
+            item.hasOwnProperty("categoria") &&
+            ![
+              "redondos",
+              "cuadrados",
+              "eye cat",
+              "lectura",
+              "infantiles",
+            ].includes(item.categoria)
+        );
+        console.log(promoCategories);
+        console.log(otherCategories);
+        setCategoriesPromo(promoCategories);
+        setCategories(otherCategories);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const addToCart = (item) => {
     if (isInCart(item.id)) {
@@ -94,6 +134,19 @@ export const CartProvider = ({ children }) => {
   
     loadProducts();
   }, []);
+  useEffect(() => {
+    getItems()
+      .then((categorias) => {
+        const promo = categorias.filter((item) => item.nombre === "promo");
+        const otro = categorias.filter((item) => item.nombre === "otro");
+        setpromo(promo[0].datos.url);
+        setotro(otro[0].datos.url);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   
 
   return (
@@ -107,7 +160,11 @@ export const CartProvider = ({ children }) => {
         totalPrecio,
         cantidadSeleccionada,
         handleModal,
-        items
+        items,
+        promo,
+        otro,
+        categoriesPromo,
+        categories
       }}
     >
       {isLoading ? (
